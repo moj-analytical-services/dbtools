@@ -25,6 +25,7 @@ data.
 \examples{
 # Get the connection to the crest data and then query crest using get_athena_connection
 
-con <- get_athena_connection('alpha-dag-crest-data-engineering')
+bucket <- alpha-dag-crest-data-engineering
+con <- get_athena_connection(bucket)
 data <- RJDBC::dbGetQuery(con, 'SELECT * FROM crest_v1.flatfile limit 1000')
 }

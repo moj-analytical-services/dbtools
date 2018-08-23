@@ -19,13 +19,12 @@
 #'@examples
 #'# Get the connection to the crest data and then query crest using get_athena_connection
 #'
-#'con <- get_athena_connection('alpha-dag-crest-data-engineering')
+#'bucket <- alpha-dag-crest-data-engineering
+#'con <- get_athena_connection(bucket)
 #'data <- RJDBC::dbGetQuery(con, 'SELECT * FROM crest_v1.flatfile limit 1000')
 get_athena_connection <- function(bucket){
 
-  bucket <- gsub("/","",bucket)
-  athena_temp_object <- 'athena_temp_outputs'
-  athena_out <- paste0("s3://", bucket, '/athena_temp_outputs/')
+  athena_out <- paste0('s3://',bucket,'/athena_temp_dir/')
   # Downloads for now but should add to standard docker deployment for rStudio
   URL <- 'https://s3.amazonaws.com/athena-downloads/drivers/JDBC/SimbaAthenaJDBC_2.0.5/AthenaJDBC42_2.0.5.jar'
   fil <- paste0('~/', basename(URL))
