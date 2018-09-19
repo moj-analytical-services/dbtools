@@ -1,18 +1,62 @@
 # dbtools
 
-This is a simple package that let's you query databases using Amazon Athena.
+This is a simple package that let's you query databases using Amazon Athena and get the s3 path to the athena out (as a csv). This is significantly faster than using the the database drivers so might be a good option when pulling in large data.
 
 To install
 ```r
 devtools::install_github('moj-analytical-services/dbtools')
 ```
 
+package requirements are:
+
+* `s3tools` _(preinstalled)_
+* `reticulate`
+* `boto3` _(preinstalled)_
+* `python` _(preinstalled)_
+
 Example:
 ```r
-con <- dbtools::get_athena_connection(bucket)
-data <- RJDBC::dbGetQuery(con, 'SELECT * FROM crest_v1.flatfile limit 1000')
+response <- dbtools::get_athena_query_response("SELECT * from crest_v1.flatfile limit 10000")
 
-View(data)
+# print out path to athena query output (as a csv)
+print(response$s3_path)
+
+# print out meta data
+print(response$s3_path)
+
+# Read in data using whatever csv reader you want
+s3_path_stripped = gsub("s3://", "", response$s3_path)
+df <- s3tools::read_using(FUN = readr::read_csv, s3_path=s3_path_stripped)
+
+```
+
+#### Meta data
+
+The output from dbtools::get_athena_query_response(...) is a list one of it's keys is `meta`. The meta key is a list where each element in this list is the name (`name`) and data type (`type`) for each column in your athena query output. For example for this table output:
+
+|col1|col2|
+|---|---|
+|1|2018-01-01|
+|2|2018-01-02|
+...
+
+Would have a meta like: 
+
+```
+response$meta[[1]]$name # col1
+response$meta[[1]]$type # int
+
+response$meta[[1]]$name # col2
+response$meta[[1]]$type # date
+
+```
+
+The meta types follow those listed as the generic meta data types used in [etl_manager](https://github.com/moj-analytical-services/etl_manager). If you want the actual athena meta data instead you can get them instead of the generic meta data types by setting the `return_athena_types` input parameter to `TRUE` e.g.
+
+```
+response <- dbtools::get_athena_query_response("SELECT * from crest_v1.flatfile limit 10000", return_athena_types=TRUE)
+
+print(response$meta)
 ```
 
 #### Notes: 
