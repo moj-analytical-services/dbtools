@@ -4,12 +4,7 @@
 \alias{get_athena_connection}
 \title{get_athena_connection}
 \usage{
-get_athena_connection(bucket)
-}
-\arguments{
-\item{bucket}{A string specifying the bucket you want to throw your athena queries to.
-This must be a bucket you have read-write access to. Ideally make this the bucket where the data you are querying is stored.
-When you run your athena queries the outputs will be stored in s3://bucket/athena_temp_outputs/.}
+get_athena_connection()
 }
 \value{
 A connection to the databases on AWS

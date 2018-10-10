@@ -10,10 +10,6 @@
 #' you have to S3 buckets. If you get an access denied error when trying to query a database please contact the owner of the bucket in which the data exists and ask for access to the
 #' data.
 #'
-#'@param bucket A string specifying the bucket you want to throw your athena queries to.
-#'This must be a bucket you have read-write access to. Ideally make this the bucket where the data you are querying is stored.
-#'When you run your athena queries the outputs will be stored in s3://bucket/athena_temp_outputs/.
-#'
 #'@return A connection to the databases on AWS
 #'
 #'@examples
@@ -22,9 +18,10 @@
 #'bucket <- alpha-dag-crest-data-engineering
 #'con <- get_athena_connection(bucket)
 #'data <- RJDBC::dbGetQuery(con, 'SELECT * FROM crest_v1.flatfile limit 1000')
-get_athena_connection <- function(bucket){
+get_athena_connection <- function(){
 
-  athena_out <- paste0('s3://',bucket,'/athena_temp_dir/')
+  athena_out <- 's3://aws-athena-query-results-593291632749-eu-west-1'
+  
   # Downloads for now but should add to standard docker deployment for rStudio
   URL <- 'https://s3.amazonaws.com/athena-downloads/drivers/JDBC/SimbaAthenaJDBC_2.0.5/AthenaJDBC42_2.0.5.jar'
   fil <- paste0('~/', basename(URL))
