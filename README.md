@@ -4,7 +4,7 @@ This is a simple package that let's you query databases using Amazon Athena.
 
 To install
 ```r
-devtools::install_github("moj-analytical-services/dbtools", ref = "rubbish_version")
+devtools::install_github("moj-analytical-services/dbtools", ref = "rubbish_version2")
 ```
 
 Example:
