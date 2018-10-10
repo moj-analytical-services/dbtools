@@ -4,12 +4,12 @@ This is a simple package that let's you query databases using Amazon Athena.
 
 To install
 ```r
-devtools::install_github('moj-analytical-services/dbtools')
+devtools::install_github("moj-analytical-services/dbtools", ref = "rubbish_version")
 ```
 
 Example:
 ```r
-con <- dbtools::get_athena_connection(bucket)
+con <- dbtools::get_athena_connection()
 data <- RJDBC::dbGetQuery(con, 'SELECT * FROM crest_v1.flatfile limit 1000')
 
 View(data)
