@@ -67,3 +67,13 @@ print(response$meta)
 - Note dates and datetimes formatting used above. See more specifics around date and datetimes [here](https://prestodb.io/docs/current/functions/datetime.html)
 - To specify a string in the sql query always use '' not "". Using ""'s means that you are referencing a database, table or col, etc.
 - When data is pulled back into rStudio the column types are either R characters (for any col that was a dates, datetimes, characters) or doubles (for everything else). 
+
+
+#### Changelog:
+
+## v0.0.2 - 2018-10-12
+
+- `timeout` is now an input parameter to `get_athena_query_response` if not set there is no timeout for the athena query.
+- `get_athena_query_response` will now print out the athena_client response if the athena query fails.
+
+## v0.0.1 - First Release
