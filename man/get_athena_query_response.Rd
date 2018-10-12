@@ -4,12 +4,15 @@
 \alias{get_athena_query_response}
 \title{get_athena_query_response}
 \usage{
-get_athena_query_response(sql_query, return_athena_types = FALSE)
+get_athena_query_response(sql_query, return_athena_types = FALSE,
+  timeout = NULL)
 }
 \arguments{
 \item{sql_query}{A string specifying the SQL query you want to send to athena. See packages github readme for info on the flavour of SQL Athena uses.}
 
 \item{return_athena_types}{Specifies if the list describing the data's meta data types should be defined using athena datatypes (TRUE) or using the data engineering team's generic metadata types (FALSE). If not specified the default value of this input parameter is set to FALSE.}
+
+\item{timeout}{Specifies How long you want your sql query to wait before it gives up (in seconds). Default parameter is NULL which will mean SQL query will not timeout and could wait forever if an issue occured.}
 }
 \value{
 A list with two keys. [1] s3_path : a string pointing to the s3 path of the athena query. [2] meta : a list that has the name and type of each column in of the data in the s3_path. Can be used to get correct data types of your output when read in to R (note the order of the columns matches the order they appear in the data).
@@ -28,7 +31,7 @@ response <- dbtools::get_athena_query_response("SELECT * from crest_v1.flatfile 
 print(response$s3_path)
 
 # print out meta data
-print(response$s3_path)
+print(response$meta)
 
 # Read in data using whatever csv reader you want
 s3_path_stripped = gsub("s3://", "", response$s3_path)
