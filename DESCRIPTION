@@ -11,5 +11,6 @@ LazyData: true
 RoxygenNote: 6.0.1
 Imports:
   reticulate (>= 1.10)
+  s3tools
 Remotes: 
   moj-analytical-services/s3tools
