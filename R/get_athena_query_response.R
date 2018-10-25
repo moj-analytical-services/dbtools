@@ -10,7 +10,7 @@
 #'
 #'@param sql_query A string specifying the SQL query you want to send to athena. See packages github readme for info on the flavour of SQL Athena uses.
 #'
-#'@param out_path The s3 folder the query results will be sent to e.g. s3://my-bucket/__temp__
+#'@param out_path The s3 folder the query results will be sent to e.g. s3://my-bucket/__temp__.  You must have permission to access to this folder!
 #'
 #'@param return_athena_types Specifies if the list describing the data's meta data types should be defined using athena datatypes (TRUE) or using the data engineering team's generic metadata types (FALSE). If not specified the default value of this input parameter is set to FALSE.
 #'
