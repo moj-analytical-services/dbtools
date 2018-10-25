@@ -3,7 +3,7 @@ import pandas as pd
 import io
 import time
 
-def get_athena_query_response(sql_query, return_athena_types = False, timeout = None) :
+def get_athena_query_response(sql_query, out_path, return_athena_types = False, timeout = None) :
 
     type_dictionary = {
         "char" : "character",
@@ -25,15 +25,12 @@ def get_athena_query_response(sql_query, return_athena_types = False, timeout = 
         bucket, key = s3_path.split('/', 1)
         return bucket, key
 
-    tmp_bucket = 'aws-athena-query-results-593291632749-eu-west-1'
-
-    temp_folder = 's3://{}/'.format(tmp_bucket)
     athena_client = boto3.client('athena', 'eu-west-1')
     s3_client = boto3.client('s3')
     response = athena_client.start_query_execution(
         QueryString=sql_query,
         ResultConfiguration={
-            'OutputLocation': temp_folder,
+            'OutputLocation': out_path,
       }
     )
 

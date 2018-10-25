@@ -1,7 +1,7 @@
 Package: dbtools
 Type: Package
 Title: Uses R wrapper function to send queries to athena.
-Version: 0.0.2
+Version: 0.1.2
 Author: Karik Isichei
 Maintainer: The package maintainer <yourself@somewhere.net>
 Description: See title.
@@ -12,5 +12,5 @@ RoxygenNote: 6.0.1
 Imports:
   reticulate (>= 1.10),
   s3tools
-Remotes: 
+Remotes:
   moj-analytical-services/s3tools
