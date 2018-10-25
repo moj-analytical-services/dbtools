@@ -16,7 +16,7 @@ package requirements are:
 
 Example:
 ```r
-response <- dbtools::get_athena_query_response("SELECT * from crest_v1.flatfile limit 10000")
+response <- dbtools::get_athena_query_response("SELECT * from crest_v1.flatfile limit 10000", out_path = "s3://my-bucket/__temp__")
 
 # print out path to athena query output (as a csv)
 print(response$s3_path)
@@ -40,7 +40,7 @@ The output from dbtools::get_athena_query_response(...) is a list one of it's ke
 |2|2018-01-02|
 ...
 
-Would have a meta like: 
+Would have a meta like:
 
 ```
 response$meta[[1]]$name # col1
@@ -59,14 +59,14 @@ response <- dbtools::get_athena_query_response("SELECT * from crest_v1.flatfile 
 print(response$meta)
 ```
 
-#### Notes: 
+#### Notes:
 
 - Amazon Athena using a flavour of SQL called presto docs can be found [here](https://prestodb.io/docs/current/)
 - To query a date column in Athena you need to specify that your value is a date e.g. `SELECT * FROM db.table WHERE date_col > date '2018-12-31'`
 - To query a datetime or timestamp column in Athena you need to specify that your value is a timestamp e.g. `SELECT * FROM db.table WHERE datetime_col > timestamp '2018-12-31 23:59:59'`
 - Note dates and datetimes formatting used above. See more specifics around date and datetimes [here](https://prestodb.io/docs/current/functions/datetime.html)
 - To specify a string in the sql query always use '' not "". Using ""'s means that you are referencing a database, table or col, etc.
-- When data is pulled back into rStudio the column types are either R characters (for any col that was a dates, datetimes, characters) or doubles (for everything else). 
+- When data is pulled back into rStudio the column types are either R characters (for any col that was a dates, datetimes, characters) or doubles (for everything else).
 
 
 #### Changelog:
