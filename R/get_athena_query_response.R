@@ -30,7 +30,7 @@
 #'s3_path_stripped = gsub("s3://", "", response$s3_path)
 #'df <- s3tools::read_using(FUN = readr::read_csv, s3_path=s3_path_stripped)
 
-get_athena_query_response <- function(sql_query, return_athena_types=FALSE, timeout = NULL){
+get_athena_query_response <- function(sql_query, out_path, return_athena_types=FALSE, timeout = NULL){
 
   # Annoyingly I think you have to pull it in as the source_python function doesn't seem to be exported properly
   require(reticulate)
@@ -38,6 +38,6 @@ get_athena_query_response <- function(sql_query, return_athena_types=FALSE, time
   python_script <- system.file("extdata", "get_athena_query_response.py", package = "dbtools")
   reticulate::source_python(python_script)
   s3tools::get_credentials()
-  response <- get_athena_query_response(sql_query=sql_query, return_athena_types=return_athena_types, timeout=timeout)
+  response <- get_athena_query_response(sql_query=sql_query, out_path=out_path, return_athena_types=return_athena_types, timeout=timeout)
   return(response)
 }
