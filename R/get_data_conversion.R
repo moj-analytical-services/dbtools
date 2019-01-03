@@ -1,6 +1,6 @@
-get_data_conversion <- function(function_name){
-    
-  if(function_name == 'tibble'){
+get_data_conversion <- function(df_type){
+
+  if(df_type == 'tibble'){
     conversion <- list(
       "character" = readr::col_character(),
       "int" = readr::col_integer(),
@@ -11,12 +11,12 @@ get_data_conversion <- function(function_name){
       "float" = readr::col_double(),
       "double" = readr::col_double()
     )
-  } else if("data.table"){
+  } else if(df_type == "data.table"){
     conversion <- NULL
-    print('NOT SUPPORTED YET  ¯\_(ツ)_/¯')
+    print('NOT SUPPORTED YET  ¯\\_(ツ)_/¯')
   } else {
     conversion <- NULL
-    print('NOT SUPPORTED YET  ¯\_(ツ)_/¯')
+    print('NOT SUPPORTED YET  ¯\\_(ツ)_/¯')
   }
   return(conversion)
 }

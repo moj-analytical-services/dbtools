@@ -14,7 +14,7 @@
 #'@param bucket The s3 bucket the query results will be written into.  You must have read and write permissions to this folder.
 #'
 #'@param output_folder The folder path where you want your athena query to be written to. If not specified the output folder is "__athena_temp__" which is recommended.
-#' 
+#'
 #'@param return_df_as String specifying what the table should be returned as i.e. 'dataframe' (reads data using read.csv), 'tibble' (reads data using readr::read_csv) or 'data.table' (reads data using data.table::fread). Default is 'tibble'. Not all tables returned are a DataFrame class.
 #'
 #'@param timeout Specifies How long you want your sql query to wait before it gives up (in seconds). Default parameter is NULL which will mean SQL query will not timeout and could wait forever if an issue occured.
@@ -26,13 +26,13 @@
 #'df <- dbtools::read_sql("SELECT * from crest_v1.flatfile limit 10000", 'my-bucket')
 #'df
 
-read_sql <- function(sql_query, bucket, output_folder="__athena_temp__", return_df_as='tibble', timeout = NULL){
+read_sql <- function(sql_query, bucket, output_folder="__athena_temp__/", return_df_as='tibble', timeout = NULL){
 
   # Annoyingly I think you have to pull it in as the source_python function doesn't seem to be exported properly
   # require(reticulate)
 
   return_df_as <- tolower(return_df_as)
-  if(!return_df_as %in% c('dataframe', 'tibble' or 'data.table')){
+  if(!return_df_as %in% c('dataframe', 'tibble', 'data.table')){
     stop("input var return_df_as must be one of the following 'dataframe', 'tibble' or 'data.table'")
   }
 
@@ -40,18 +40,19 @@ read_sql <- function(sql_query, bucket, output_folder="__athena_temp__", return_
   s3_path_stripped <- gsub("s3://", "", response$s3_path)
   s3_key <- gsub(paste0(bucket,"/"), "", s3_path_stripped)
 
+  data_conversion <- dbtools:::get_data_conversion(return_df_as)
   if(return_df_as == 'tibble'){
-    data_conversion <- dbtools:::get_data_conversion()
     col_classes = list()
     for(m in response$meta){
       col_classes[[m$name]] = data_conversion[[m$type]]
     }
-    df <- s3tools::read_using(FUN=readr::read_csv, path=s3_path_stripped, header=TRUE, colClasses = col_classes)
+    col_types = do.call(readr::cols, col_classes)
+    df <- s3tools::read_using(FUN=readr::read_csv, s3_path=s3_path_stripped, col_names=TRUE, col_types=col_types)
 
   } else if(return_df_as == 'data.table'){
-    print('NOT SUPPORTED YET  ¯\_(ツ)_/¯')
+    print('NOT SUPPORTED YET  ¯\\_(ツ)_/¯')
   } else {
-    print('NOT SUPPORTED YET  ¯\_(ツ)_/¯')
+    print('NOT SUPPORTED YET  ¯\\_(ツ)_/¯')
   }
   dbtools:::delete_object(bucket, s3_key)
   return(df)

@@ -2,8 +2,9 @@ import boto3
 import pandas as pd
 import io
 import time
+import os
 
-def get_athena_query_response(sql_query, bucket, output_folder = "__athena_temp__", return_athena_types = False, timeout = None) :
+def get_athena_query_response(sql_query, bucket, output_folder = "__athena_temp__/", return_athena_types = False, timeout = None) :
 
     type_dictionary = {
         "char" : "character",
@@ -17,7 +18,9 @@ def get_athena_query_response(sql_query, bucket, output_folder = "__athena_temp_
         "double" : "double"
     }
 
-    out_path = f's3://{bucket}/{output_folder}'
+    out_path = os.path.join('s3://', bucket, output_folder)
+    if out_path[-1] != '/':
+      out_path += '/'
 
     athena_client = boto3.client('athena', 'eu-west-1')
     response = athena_client.start_query_execution(

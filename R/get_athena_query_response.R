@@ -13,7 +13,7 @@
 #'@param bucket The s3 bucket the query results will be written into.  You must have read and write permissions to this folder.
 #'
 #'@param output_folder The folder path where you want your athena query to be written to. If not specified the output folder is "__athena_temp__" which is recommended.
-#' 
+#'
 #'@param return_athena_types Specifies if the list describing the data's meta data types should be defined using athena datatypes (TRUE) or using the data engineering team's generic metadata types (FALSE). If not specified the default value of this input parameter is set to FALSE.
 #'
 #'@param timeout Specifies How long you want your sql query to wait before it gives up (in seconds). Default parameter is NULL which will mean SQL query will not timeout and could wait forever if an issue occured.
@@ -34,7 +34,7 @@
 #'s3_path_stripped = gsub("s3://", "", response$s3_path)
 #'df <- s3tools::read_using(FUN = read.csv, s3_path=s3_path_stripped)
 
-get_athena_query_response <- function(sql_query, bucket, output_folder="__athena_temp__", return_athena_types=FALSE, timeout = NULL){
+get_athena_query_response <- function(sql_query, bucket, output_folder="__athena_temp__/", return_athena_types=FALSE, timeout = NULL){
 
   # Annoyingly I think you have to pull it in as the source_python function doesn't seem to be exported properly
   # require(reticulate)
