@@ -11,12 +11,19 @@ get_data_conversion <- function(df_type){
       "float" = readr::col_double(),
       "double" = readr::col_double()
     )
-  } else if(df_type == "data.table"){
-    conversion <- NULL
-    print('NOT SUPPORTED YET  ¯\\_(ツ)_/¯')
   } else {
-    conversion <- NULL
-    print('NOT SUPPORTED YET  ¯\\_(ツ)_/¯')
+    # same for data.table and read.csv 
+    # Note that dates/datetimes are read in as characters
+    conversion <- list(
+      "character" = "character",
+      "int" = "integer",
+      "long" = "integer64",
+      "date" = "character",
+      "datetime" = "character",
+      "boolean" = "logical",
+      "float" = "double"
+      "double" = "double"
+    )
   }
   return(conversion)
 }

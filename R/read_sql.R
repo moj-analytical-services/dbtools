@@ -41,16 +41,17 @@ read_sql <- function(sql_query, bucket, output_folder="__athena_temp__/", return
   s3_key <- gsub(paste0(bucket,"/"), "", s3_path_stripped)
 
   data_conversion <- dbtools:::get_data_conversion(return_df_as)
-  if(return_df_as == 'tibble'){
-    col_classes = list()
+  col_classes = list()
     for(m in response$meta){
       col_classes[[m$name]] = data_conversion[[m$type]]
     }
+  if(return_df_as == 'tibble'){
+    # This is the best R work arround I could find to replicate Python's **kwargs...
     col_types = do.call(readr::cols, col_classes)
     df <- s3tools::read_using(FUN=readr::read_csv, s3_path=s3_path_stripped, col_names=TRUE, col_types=col_types)
 
   } else if(return_df_as == 'data.table'){
-    print('NOT SUPPORTED YET  ¯\\_(ツ)_/¯')
+    df <- s3tools::read_using(FUN=data.table::fread, s3_path=s3_path_stripped, header=TRUE, colClasses=col_classes)
   } else {
     print('NOT SUPPORTED YET  ¯\\_(ツ)_/¯')
   }
