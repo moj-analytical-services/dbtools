@@ -16,6 +16,7 @@
 #'@param output_folder The folder path where you want your athena query to be written to. If not specified the output folder is "__athena_temp__" which is recommended.
 #'
 #'@param return_df_as String specifying what the table should be returned as i.e. 'dataframe' (reads data using read.csv), 'tibble' (reads data using readr::read_csv) or 'data.table' (reads data using data.table::fread). Default is 'tibble'. Not all tables returned are a DataFrame class.
+#' Only return_df_as set to 'tibble' maintains date and datetime formats. dataframe and data.table will convert date and datetimes to characters.
 #'
 #'@param timeout Specifies How long you want your sql query to wait before it gives up (in seconds). Default parameter is NULL which will mean SQL query will not timeout and could wait forever if an issue occured.
 #'
