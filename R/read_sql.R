@@ -45,15 +45,16 @@ read_sql <- function(sql_query, bucket, output_folder="__athena_temp__/", return
     for(m in response$meta){
       col_classes[[m$name]] = data_conversion[[m$type]]
     }
+  col_classes_vec = unlist(col_classes)
   if(return_df_as == 'tibble'){
     # This is the best R work arround I could find to replicate Python's **kwargs...
     col_types = do.call(readr::cols, col_classes)
     df <- s3tools::read_using(FUN=readr::read_csv, s3_path=s3_path_stripped, col_names=TRUE, col_types=col_types)
 
   } else if(return_df_as == 'data.table'){
-    df <- s3tools::read_using(FUN=data.table::fread, s3_path=s3_path_stripped, header=TRUE, colClasses=col_classes)
+    df <- s3tools::read_using(FUN=data.table::fread, s3_path=s3_path_stripped, header=TRUE, colClasses=col_classes_vec)
   } else {
-    print('NOT SUPPORTED YET  ¯\\_(ツ)_/¯')
+    df <- s3tools::read_using(FUN=read.csv, s3_path=s3_path_stripped, header=TRUE, colClasses=col_classes_vec)
   }
   dbtools:::delete_object(bucket, s3_key)
   return(df)

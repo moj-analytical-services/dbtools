@@ -21,7 +21,7 @@ get_data_conversion <- function(df_type){
       "date" = "character",
       "datetime" = "character",
       "boolean" = "logical",
-      "float" = "double"
+      "float" = "double",
       "double" = "double"
     )
   }
