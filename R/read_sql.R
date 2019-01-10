@@ -48,7 +48,7 @@ read_sql <- function(sql_query, bucket, output_folder="__athena_temp__/", return
     }
   col_classes_vec = unlist(col_classes)
   if(return_df_as == 'tibble'){
-    # This is the best R work arround I could find to replicate Python's **kwargs...
+    #This is the best R work arround I could find to replicate Python's **kwargs...
     col_types = do.call(readr::cols, col_classes)
     df <- s3tools::read_using(FUN=readr::read_csv, s3_path=s3_path_stripped, col_names=TRUE, col_types=col_types)
 
