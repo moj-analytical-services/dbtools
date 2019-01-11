@@ -1,6 +1,7 @@
 get_data_conversion <- function(df_type){
 
   if(df_type == 'tibble'){
+    # Note how 64 bit integers (long) are read in as double
     conversion <- list(
       "character" = readr::col_character(),
       "int" = readr::col_integer(),
@@ -11,8 +12,7 @@ get_data_conversion <- function(df_type){
       "float" = readr::col_double(),
       "double" = readr::col_double()
     )
-  } else {
-    # same for data.table and read.csv
+  } else if(df_type == 'data.table'){
     # Note that dates/datetimes are read in as characters
     conversion <- list(
       "character" = "character",
@@ -23,6 +23,18 @@ get_data_conversion <- function(df_type){
       "boolean" = "logical",
       "float" = "double",
       "double" = "double"
+    )
+  } else {
+    # have to read in everything as character see readme
+    conversion <- list(
+      "character" = "character",
+      "int" = "character",
+      "long" = "character",
+      "date" = "character",
+      "datetime" = "character",
+      "boolean" = "character",
+      "float" = "character",
+      "double" = "character"
     )
   }
   return(conversion)
