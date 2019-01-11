@@ -24,6 +24,7 @@ test_that("data from read_sql as tibble conforms", {
   expect_true(t3)
   expect_true(t4)
 
+  expect_equal
   # Test col types
   df <- dbtools::read_sql("SELECT * from dbtools.test_data", 'dbtools-test-bucket', return_df_as='dataframe')
   dt <- dbtools::read_sql("SELECT * from dbtools.test_data", 'dbtools-test-bucket', return_df_as='data.table')

@@ -9,10 +9,14 @@ devtools::install_github('moj-analytical-services/dbtools')
 
 package requirements are:
 
-* `s3tools` _(preinstalled)_
-* `reticulate`
-* `boto3` _(preinstalled)_
-* `python` _(preinstalled)_
+- `s3tools` _(preinstalled)_
+- `reticulate`
+- `boto3` _(preinstalled)_
+- `python` _(preinstalled)_
+
+optional requirements:
+- `readr` _(preinstalled)_
+- `data.table`
 
 Example:
 ```r
@@ -29,6 +33,38 @@ s3_path_stripped = gsub("s3://", "", response$s3_path)
 df <- s3tools::read_using(FUN = readr::read_csv, s3_path=s3_path_stripped)
 
 ```
+## Meta data conformance
+
+When using the `read_sql` function you are required to specify the type of dataframe to return:
+
+- tibble _(default)_
+- data.table
+- dataframe
+
+_note: to find out more on this function see the function documentation i.e. `?dbtools::read_sql`_
+
+Each is a type of dataframe in R and have different querks when converting from Athena datatypes to R datatypes.
+
+- *tibble:* This is the default dataframe choice as it was the only dataframe that converts dates and datetimes (aka timestamps) on read rather than requiring a second parse of the data to convert date and timestamps to their correct types from strings. This is a good option if your data is not that large and you like those tidyverse things. One downside is that long integers are actually stored as doubles (this is because tibbles currently don't support 64 bit integers - [see issue](https://github.com/tidyverse/readr/issues/633)).
+
+- *data.table:* This dataframe class is really good for larger datasets (as it's more memory efficient and just generally better). long integers are read in as int64. Dates and datetimes are read in as strings. Feel free to cast the columns afterwards, `data.table::fread` doesn't convert them on read - [see documentation](https://www.rdocumentation.org/packages/data.table/versions/1.10.4-2/topics/fread).
+
+- *dataframe:* Added support for this because it's the base dataframe type in R. Dates/datetimes are read in as strings and long integers (64 bit) are read in as doubles. Feel free to cast the columns afterwards. `read.csv` doesn't convert them on read in so will leave any further datatype conversion to the user (for the time being at least, if you're so inclinded pull requests are always welcome).
+
+## Meta data conversion
+
+Below is a table that explains what the conversion is from our data types to the supported dataframe in R (using the read_sql function):
+
+| data type | tibble type _(R atomic type)_        | dataframe type _(R atomic type)_ | data.table type _(R atomic type)_ |
+|-----------|--------------------------------------|----------------------------------|-----------------------------------|
+| character | readr::col_character() _(character)_ | character                        | character                         |
+| int       | readr::col_integer() _(integer)_     | integer                          | bit64::integer64() _(?)_          |
+| long      | readr::col_double() _(double)_       | double                           | double                            |
+| date      | readr::col_date() _(double)_         | character                        | character                         |
+| datetime  | readr::col_datetime() _(double)_     | character                        | character                         |
+| boolean   | readr::col_logical() _(logical)_     | logical                          | logical                           |
+| float     | readr::col_double() _(double)_       | double                           | double                            |
+| double    | readr::col_double() _(double)_       | double                           | double                            |
 
 #### Meta data
 

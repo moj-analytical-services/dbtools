@@ -12,7 +12,7 @@ get_data_conversion <- function(df_type){
       "double" = readr::col_double()
     )
   } else {
-    # same for data.table and read.csv 
+    # same for data.table and read.csv
     # Note that dates/datetimes are read in as characters
     conversion <- list(
       "character" = "character",
