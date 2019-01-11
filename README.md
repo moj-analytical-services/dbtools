@@ -49,22 +49,24 @@ Each is a type of dataframe in R and have different querks when converting from 
 
 - *data.table:* This dataframe class is really good for larger datasets (as it's more memory efficient and just generally better). long integers are read in as int64. Dates and datetimes are read in as strings. Feel free to cast the columns afterwards, `data.table::fread` doesn't convert them on read - [see documentation](https://www.rdocumentation.org/packages/data.table/versions/1.10.4-2/topics/fread).
 
-- *dataframe:* Added support for this because it's the base dataframe type in R. Dates/datetimes are read in as strings and long integers (64 bit) are read in as doubles. Feel free to cast the columns afterwards. `read.csv` doesn't convert them on read in so will leave any further datatype conversion to the user (for the time being at least, if you're so inclinded pull requests are always welcome).
+- *dataframe:* Added support for this because it's the base dataframe type in R. However, Athena exports CSVs with every value in double quotes because of this the `scan` function that is called internally by `read.csv` throws an error unless you specify columns as a character ([see issue](https://stackoverflow.com/questions/35605354/r-read-numeric-values-wrapped-in-quotes-from-csv)). Therefore the returning dataframe has every column type as a character. Feel free to cast the columns afterwards.
 
 ## Meta data conversion
 
 Below is a table that explains what the conversion is from our data types to the supported dataframe in R (using the read_sql function):
 
-| data type | tibble type _(R atomic type)_        | dataframe type _(R atomic type)_ | data.table type _(R atomic type)_ |
-|-----------|--------------------------------------|----------------------------------|-----------------------------------|
-| character | readr::col_character() _(character)_ | character                        | character                         |
-| int       | readr::col_integer() _(integer)_     | integer                          | bit64::integer64() _(?)_          |
-| long      | readr::col_double() _(double)_       | double                           | double                            |
-| date      | readr::col_date() _(double)_         | character                        | character                         |
-| datetime  | readr::col_datetime() _(double)_     | character                        | character                         |
-| boolean   | readr::col_logical() _(logical)_     | logical                          | logical                           |
-| float     | readr::col_double() _(double)_       | double                           | double                            |
-| double    | readr::col_double() _(double)_       | double                           | double                            |
+| data type | tibble type _(R atomic type)_        | data.table type _(R atomic type)_ | dataframe type _(R atomic type)_ |
+|-----------|--------------------------------------|-----------------------------------|----------------------------------|
+| character | readr::col_character() _(character)_ | character                         | character                        |
+| int       | readr::col_integer() _(integer)_     | bit64::integer64() _(double)_     | character                        |
+| long      | readr::col_double() _(double)_       | double                            | character                        |
+| date      | readr::col_date() _(double)_         | character                         | character                        |
+| datetime  | readr::col_datetime() _(double)_     | character                         | character                        |
+| boolean   | readr::col_logical() _(logical)_     | logical                           | character                        |
+| float     | readr::col_double() _(double)_       | double                            | character                        |
+| double    | readr::col_double() _(double)_       | double                            | character                        |
+
+_Note: If the R atomic type is not listed in the table above then it is the same as the type specified_
 
 #### Meta data
 

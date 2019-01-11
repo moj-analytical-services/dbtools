@@ -47,6 +47,7 @@ read_sql <- function(sql_query, bucket, output_folder="__athena_temp__/", return
       col_classes[[m$name]] = data_conversion[[m$type]]
     }
   col_classes_vec = unlist(col_classes)
+
   if(return_df_as == 'tibble'){
     #This is the best R work arround I could find to replicate Python's **kwargs...
     col_types = do.call(readr::cols, col_classes)
