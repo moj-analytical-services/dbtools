@@ -21,8 +21,8 @@ test_that("data from read_sql as tibble conforms", {
     class_vec <- c(class_vec, paste(class(df[[c]]), collapse = ' '))
   }
 
-  expect_equal(type_vec, c("character","integer","integer","double","double","logical","double","double"))
-  expect_equal(class_vec, c("character","integer","integer","Date","POSIXct POSIXt","logical","numeric","numeric"))
+  expect_equal(type_vec, c("character","integer","double","double","double","logical","double","double"))
+  expect_equal(class_vec, c("character","integer","numeric","Date","POSIXct POSIXt","logical","numeric","numeric"))
 
   first_row <- c(df[[1,1]])
   second_row <- c(df[[2,1]])
@@ -103,13 +103,12 @@ test_that("data from read_sql as dataframe conforms", {
 
   first_row <- c(df[[1,1]])
   second_row <- c(df[[2,1]])
-
   for(i in 2:8){
     first_row <- c(first_row, as.character(df[[1,i]]))
     second_row <- c(second_row, as.character(df[[2,i]]))
   }
-  exp_first_row <- c("malcovitch", "1", "2147483648","1900-01-01","1900-01-01 00:00:00.000","TRUE","0.123456","0.123456789")
-  exp_second_row <- c("malcovitch, malcovitch","2147483647","10000000000","2018-01-01","2018-01-01 23:59:59.000","FALSE","3.141592","3.141592653589")
+  exp_first_row <- c("malcovitch", "1", "2147483648","1900-01-01","1900-01-01 00:00:00.000","true","0.123456","0.123456789")
+  exp_second_row <- c("malcovitch, malcovitch","2147483647","10000000000","2018-01-01","2018-01-01 23:59:59.000","false","3.141592","3.141592653589")
 
   expect_equal(first_row, exp_first_row)
   expect_equal(second_row, exp_second_row)
