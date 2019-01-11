@@ -4,7 +4,7 @@ get_data_conversion <- function(df_type){
     conversion <- list(
       "character" = readr::col_character(),
       "int" = readr::col_integer(),
-      "long" = readr::col_integer(),
+      "long" = readr::col_double(),
       "date" = readr::col_date(),
       "datetime" = readr::col_datetime(),
       "boolean" = readr::col_logical(),
