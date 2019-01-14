@@ -2,21 +2,36 @@
 
 This is a simple package that let's you query databases using Amazon Athena and get the s3 path to the athena out (as a csv). This is significantly faster than using the the database drivers so might be a good option when pulling in large data.
 
-To install
+To install latest version
 ```r
 devtools::install_github('moj-analytical-services/dbtools')
 ```
 
 package requirements are:
 
-* `s3tools` _(preinstalled)_
-* `reticulate`
-* `boto3` _(preinstalled)_
-* `python` _(preinstalled)_
+- `s3tools` _(preinstalled)_
+- `reticulate`
+- `boto3` _(preinstalled)_
+- `python` _(preinstalled)_
+- `readr` _(preinstalled)_
+- `data.table` _(version 1.11.8 or above)_
 
-Example:
+Examples:
+
+The easiest way to read in the data:
 ```r
-response <- dbtools::get_athena_query_response("SELECT * from crest_v1.flatfile limit 10000", out_path = "s3://my-bucket/__temp__")
+# returns SQL query with matching data types as a tibble
+df = dbtools::read_using("SELECT * from crest_v1.flatfile limit 10000", bucket = "my-bucket")
+
+# Read df as a data.table
+dt = dbtools::read_using("SELECT * from crest_v1.flatfile limit 10000", bucket = "my-bucket", return_df_as = "data.table")
+```
+
+If you want to read in your data using a specific method
+```r
+
+### Read SQL query using your own read csv method
+response <- dbtools::get_athena_query_response("SELECT * from crest_v1.flatfile limit 10000", bucket = "my-bucket")
 
 # print out path to athena query output (as a csv)
 print(response$s3_path)
@@ -24,11 +39,45 @@ print(response$s3_path)
 # print out meta data
 print(response$s3_path)
 
-# Read in data using whatever csv reader you want
+# Read in data using whatever csv reader you want (in this example using data.table::fread but reading everything as a string)
 s3_path_stripped = gsub("s3://", "", response$s3_path)
-df <- s3tools::read_using(FUN = readr::read_csv, s3_path=s3_path_stripped)
-
+df <- s3tools::read_using(FUN = data.table::fread, s3_path=s3_path_stripped)
 ```
+
+## Meta data conformance
+
+When using the `read_sql` function you are required to specify the type of dataframe to return:
+
+- tibble _(default)_
+- data.table
+- dataframe
+
+_note: to find out more on this function see the function documentation i.e. `?dbtools::read_sql`_
+
+Each is a type of dataframe in R and have different querks when converting from Athena datatypes to R datatypes.
+
+- *tibble:* This is the default dataframe choice as it was the only dataframe that converts dates and datetimes (aka timestamps) on read rather than requiring a second parse of the data to convert date and timestamps to their correct types from strings. This is a good option if your data is not that large and you like those tidyverse things. One downside is that long integers are actually stored as doubles (this is because tibbles currently don't support 64 bit integers - [see issue](https://github.com/tidyverse/readr/issues/633)).
+
+- *data.table:* This dataframe class is really good for larger datasets (as it's more memory efficient and just generally better). long integers are read in as int64. Dates and datetimes are read in as strings. Feel free to cast the columns afterwards, `data.table::fread` doesn't convert them on read - [see documentation](https://www.rdocumentation.org/packages/data.table/versions/1.10.4-2/topics/fread).
+
+- *dataframe:* Added support for this because it's the base dataframe type in R. However, Athena exports CSVs with every value in double quotes because of this the `scan` function that is called internally by `read.csv` throws an error unless you specify columns as a character ([see issue](https://stackoverflow.com/questions/35605354/r-read-numeric-values-wrapped-in-quotes-from-csv)). Therefore the returning dataframe has every column type as a character. Feel free to cast the columns afterwards.
+
+## Meta data conversion
+
+Below is a table that explains what the conversion is from our data types to the supported dataframe in R (using the read_sql function):
+
+| data type | tibble type _(R atomic type)_        | data.table type _(R atomic type)_ | dataframe type _(R atomic type)_ |
+|-----------|--------------------------------------|-----------------------------------|----------------------------------|
+| character | readr::col_character() _(character)_ | character                         | character                        |
+| int       | readr::col_integer() _(integer)_     | bit64::integer64() _(double)_     | character                        |
+| long      | readr::col_double() _(double)_       | double                            | character                        |
+| date      | readr::col_date() _(double)_         | character                         | character                        |
+| datetime  | readr::col_datetime() _(double)_     | character                         | character                        |
+| boolean   | readr::col_logical() _(logical)_     | logical                           | character                        |
+| float     | readr::col_double() _(double)_       | double                            | character                        |
+| double    | readr::col_double() _(double)_       | double                            | character                        |
+
+_Note: If the R atomic type is not listed in the table above then it is the same as the type specified_
 
 #### Meta data
 
@@ -70,6 +119,11 @@ print(response$meta)
 
 
 #### Changelog:
+
+## v1.0.0 - 2019-01-14
+
+- Added function `read_sql` which reads an SQL query directly into an R dataframe. See R documentation (i.e. `?read_sql`)
+- Input parameter `out_path` in function `get_athena_query_response` has been replaced by two input parameters `bucket` and `output_folder`. E.g. If your `out_path="s3://my-bucket/__temp__"` then the new input params are `bucket=my-bucket` and `output_folder=__temp__`. Note that ` output_folder` defaults to value `__athena_temp__` it is recommended that you leave this unchanged.
 
 ## v0.0.2 - 2018-10-12
 
