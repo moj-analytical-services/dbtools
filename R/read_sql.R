@@ -59,5 +59,6 @@ read_sql <- function(sql_query, bucket, output_folder="__athena_temp__/", return
     df <- s3tools::read_using(FUN=read.csv, s3_path=s3_path_stripped, header=TRUE, colClasses=col_classes_vec)
   }
   dbtools:::delete_object(bucket, s3_key)
+  dbtools:::delete_object(bucket, paste0(s3_key, ".metadata"))
   return(df)
 }
