@@ -13,10 +13,8 @@ package requirements are:
 - `reticulate`
 - `boto3` _(preinstalled)_
 - `python` _(preinstalled)_
-
-optional requirements:
 - `readr` _(preinstalled)_
-- `data.table`
+- `data.table` _(version 1.11.8 or above)_
 
 Examples:
 
@@ -123,10 +121,10 @@ print(response$meta)
 #### Changelog:
 
 ## v1.0.0 - 2019-01-14
+
 - Added function `read_sql` which reads an SQL query directly into an R dataframe. See R documentation (i.e. `?read_sql`)
 - Input parameter `out_path` in function `get_athena_query_response` has been replaced by two input parameters `bucket` and `output_folder`. E.g. If your `out_path="s3://my-bucket/__temp__"` then the new input params are `bucket=my-bucket` and `output_folder=__temp__`. Note that ` output_folder` defaults to value `__athena_temp__` it is recommended that you leave this unchanged.
 
-- 
 ## v0.0.2 - 2018-10-12
 
 - `timeout` is now an input parameter to `get_athena_query_response` if not set there is no timeout for the athena query.
