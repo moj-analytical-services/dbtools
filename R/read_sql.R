@@ -2,7 +2,7 @@
 #'
 #'@description uses boto3 (in python) to send an sql query to athena and return an R dataframe, tibble or data.table based on user preference.
 #'
-#'@import reticulate s3tools
+#'@import reticulate s3tools readr data.table
 #'
 #'@export
 #'

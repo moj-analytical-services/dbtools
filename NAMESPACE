@@ -2,5 +2,7 @@
 
 export(get_athena_query_response)
 export(read_sql)
+import(data.table)
+import(readr)
 import(reticulate)
 import(s3tools)
