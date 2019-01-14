@@ -21,10 +21,10 @@ Examples:
 The easiest way to read in the data:
 ```r
 # returns SQL query with matching data types as a tibble
-df = dbtools::read_using("SELECT * from crest_v1.flatfile limit 10000", bucket = "my-bucket")
+df = dbtools::read_sql("SELECT * from crest_v1.flatfile limit 10000", bucket = "my-bucket")
 
 # Read df as a data.table
-dt = dbtools::read_using("SELECT * from crest_v1.flatfile limit 10000", bucket = "my-bucket", return_df_as = "data.table")
+dt = dbtools::read_sql("SELECT * from crest_v1.flatfile limit 10000", bucket = "my-bucket", return_df_as = "data.table")
 ```
 
 If you want to read in your data using a specific method
@@ -41,7 +41,7 @@ print(response$s3_path)
 
 # Read in data using whatever csv reader you want (in this example using data.table::fread but reading everything as a string)
 s3_path_stripped = gsub("s3://", "", response$s3_path)
-df <- s3tools::read_using(FUN = data.table::fread, s3_path=s3_path_stripped)
+df <- s3tools::read_sql(FUN = data.table::fread, s3_path=s3_path_stripped)
 ```
 
 ## Meta data conformance
