@@ -2,7 +2,7 @@
 
 This is a simple package that let's you query databases using Amazon Athena and get the s3 path to the athena out (as a csv). This is significantly faster than using the the database drivers so might be a good option when pulling in large data.
 
-To install
+To install latest version
 ```r
 devtools::install_github('moj-analytical-services/dbtools')
 ```
@@ -18,9 +18,22 @@ optional requirements:
 - `readr` _(preinstalled)_
 - `data.table`
 
-Example:
+Examples:
+
+The easiest way to read in the data:
 ```r
-response <- dbtools::get_athena_query_response("SELECT * from crest_v1.flatfile limit 10000", out_path = "s3://my-bucket/__temp__")
+# returns SQL query with matching data types as a tibble
+df = dbtools::read_using("SELECT * from crest_v1.flatfile limit 10000", bucket = "my-bucket")
+
+# Read df as a data.table
+dt = dbtools::read_using("SELECT * from crest_v1.flatfile limit 10000", bucket = "my-bucket", return_df_as = "data.table")
+```
+
+If you want to read in your data using a specific method
+```r
+
+### Read SQL query using your own read csv method
+response <- dbtools::get_athena_query_response("SELECT * from crest_v1.flatfile limit 10000", bucket = "my-bucket")
 
 # print out path to athena query output (as a csv)
 print(response$s3_path)
@@ -28,11 +41,11 @@ print(response$s3_path)
 # print out meta data
 print(response$s3_path)
 
-# Read in data using whatever csv reader you want
+# Read in data using whatever csv reader you want (in this example using data.table::fread but reading everything as a string)
 s3_path_stripped = gsub("s3://", "", response$s3_path)
-df <- s3tools::read_using(FUN = readr::read_csv, s3_path=s3_path_stripped)
-
+df <- s3tools::read_using(FUN = data.table::fread, s3_path=s3_path_stripped)
 ```
+
 ## Meta data conformance
 
 When using the `read_sql` function you are required to specify the type of dataframe to return:
@@ -109,6 +122,11 @@ print(response$meta)
 
 #### Changelog:
 
+## v1.0.0 - 2019-01-14
+- Added function `read_sql` which reads an SQL query directly into an R dataframe. See R documentation (i.e. `?read_sql`)
+- Input parameter `out_path` in function `get_athena_query_response` has been replaced by two input parameters `bucket` and `output_folder`. E.g. If your `out_path="s3://my-bucket/__temp__"` then the new input params are `bucket=my-bucket` and `output_folder=__temp__`. Note that ` output_folder` defaults to value `__athena_temp__` it is recommended that you leave this unchanged.
+
+- 
 ## v0.0.2 - 2018-10-12
 
 - `timeout` is now an input parameter to `get_athena_query_response` if not set there is no timeout for the athena query.
