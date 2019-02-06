@@ -34,10 +34,13 @@
 #'s3_path_stripped = gsub("s3://", "", response$s3_path)
 #'df <- s3tools::read_using(FUN = read.csv, s3_path=s3_path_stripped)
 
-get_athena_query_response <- function(sql_query, bucket, output_folder="__athena_temp__/", return_athena_types=FALSE, timeout = NULL){
+get_athena_query_response <- function(sql_query, return_athena_types=FALSE, timeout = NULL){
 
   # Annoyingly I think you have to pull it in as the source_python function doesn't seem to be exported properly
   # require(reticulate)
+
+  bucket <- "alpha-athena-query-dump"
+  output_folder=paste0(dbtools:::get_iam_role(), "/__athena_temp__/")
 
   python_script <- system.file("extdata", "get_athena_query_response.py", package = "dbtools")
   reticulate::source_python(python_script)

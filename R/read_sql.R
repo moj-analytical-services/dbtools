@@ -27,10 +27,13 @@
 #'df <- dbtools::read_sql("SELECT * from crest_v1.flatfile limit 10000", 'my-bucket')
 #'df
 
-read_sql <- function(sql_query, bucket, output_folder="__athena_temp__/", return_df_as='tibble', timeout = NULL){
+read_sql <- function(sql_query, return_df_as='tibble', timeout = NULL){
 
   # Annoyingly I think you have to pull it in as the source_python function doesn't seem to be exported properly
   # require(reticulate)
+
+  bucket <- "alpha-athena-query-dump"
+  output_folder=paste0(dbtools:::get_iam_role(), "/__athena_temp__/")
 
   return_df_as <- tolower(return_df_as)
   if(!return_df_as %in% c('dataframe', 'tibble', 'data.table')){
@@ -54,6 +57,10 @@ read_sql <- function(sql_query, bucket, output_folder="__athena_temp__/", return
     df <- s3tools::read_using(FUN=readr::read_csv, s3_path=s3_path_stripped, col_names=TRUE, col_types=col_types)
 
   } else if(return_df_as == 'data.table'){
+    dt_ver <- packageVersion("data.table")
+    if(dt_ver < '1.11.8'){
+      warning("Your version of data.table must be 1.11.8 or above please install a new version otherwise your outputs of type data.table may not convert data types properly.")
+    }
     df <- s3tools::read_using(FUN=data.table::fread, s3_path=s3_path_stripped, header=TRUE, colClasses=col_classes_vec)
   } else {
     df <- s3tools::read_using(FUN=read.csv, s3_path=s3_path_stripped, header=TRUE, colClasses=col_classes_vec)

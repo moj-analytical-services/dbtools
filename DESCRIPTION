@@ -12,7 +12,6 @@ RoxygenNote: 6.0.1
 Imports:
   reticulate (>= 1.10),
   s3tools,
-  readr,
-  data.table (>= 1.11.8)
+  readr
 Remotes:
   moj-analytical-services/s3tools
