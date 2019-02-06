@@ -39,12 +39,9 @@ get_athena_query_response <- function(sql_query, return_athena_types=FALSE, time
   # Annoyingly I think you have to pull it in as the source_python function doesn't seem to be exported properly
   # require(reticulate)
 
-  bucket <- "alpha-athena-query-dump"
-  output_folder=paste0(dbtools:::get_iam_role(), "/__athena_temp__/")
-
   python_script <- system.file("extdata", "get_athena_query_response.py", package = "dbtools")
   reticulate::source_python(python_script)
   s3tools::get_credentials()
-  response <- get_athena_query_response(sql_query=sql_query, bucket=bucket, output_folder=output_folder, return_athena_types=return_athena_types, timeout=timeout)
+  response <- get_athena_query_response(sql_query=sql_query, return_athena_types=return_athena_types, timeout=timeout)
   return(response)
 }
