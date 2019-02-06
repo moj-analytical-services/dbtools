@@ -32,15 +32,12 @@ read_sql <- function(sql_query, return_df_as='tibble', timeout = NULL){
   # Annoyingly I think you have to pull it in as the source_python function doesn't seem to be exported properly
   # require(reticulate)
 
-  bucket <- "alpha-athena-query-dump"
-  output_folder=paste0(dbtools:::get_iam_role(), "/__athena_temp__/")
-
   return_df_as <- tolower(return_df_as)
   if(!return_df_as %in% c('dataframe', 'tibble', 'data.table')){
     stop("input var return_df_as must be one of the following 'dataframe', 'tibble' or 'data.table'")
   }
 
-  response <- dbtools::get_athena_query_response(sql_query=sql_query, bucket=bucket, output_folder=output_folder, return_athena_types=FALSE, timeout=timeout)
+  response <- dbtools::get_athena_query_response(sql_query=sql_query, return_athena_types=FALSE, timeout=timeout)
   s3_path_stripped <- gsub("s3://", "", response$s3_path)
   s3_key <- gsub(paste0(bucket,"/"), "", s3_path_stripped)
 
