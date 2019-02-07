@@ -4,15 +4,10 @@
 \alias{read_sql}
 \title{read_sql}
 \usage{
-read_sql(sql_query, bucket, output_folder = "__athena_temp__/",
-  return_df_as = "tibble", timeout = NULL)
+read_sql(sql_query, return_df_as = "tibble", timeout = NULL)
 }
 \arguments{
 \item{sql_query}{A string specifying the SQL query you want to send to athena. See packages github readme for info on the flavour of SQL Athena uses.}
-
-\item{bucket}{The s3 bucket the query results will be written into.  You must have read and write permissions to this folder.}
-
-\item{output_folder}{The folder path where you want your athena query to be written to. If not specified the output folder is "__athena_temp__" which is recommended.}
 
 \item{return_df_as}{String specifying what the table should be returned as i.e. 'dataframe' (reads data using read.csv), 'tibble' (reads data using readr::read_csv) or 'data.table' (reads data using data.table::fread). Default is 'tibble'. Not all tables returned are a DataFrame class.
 Only return_df_as set to 'tibble' maintains date and datetime formats. dataframe and data.table will convert date and datetimes to characters.}
@@ -31,6 +26,6 @@ Function returns dataframe. If needing more a more bespoke or self defined data 
 }
 \examples{
 # Read an sql query using readr::read_csv i.e. returning a Tibble
-df <- dbtools::read_sql("SELECT * from crest_v1.flatfile limit 10000", 'my-bucket')
+df <- dbtools::read_sql("SELECT * from crest_v1.flatfile limit 10000")
 df
 }

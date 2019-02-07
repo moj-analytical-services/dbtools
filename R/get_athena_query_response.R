@@ -10,10 +10,6 @@
 #'
 #'@param sql_query A string specifying the SQL query you want to send to athena. See packages github readme for info on the flavour of SQL Athena uses.
 #'
-#'@param bucket The s3 bucket the query results will be written into.  You must have read and write permissions to this folder.
-#'
-#'@param output_folder The folder path where you want your athena query to be written to. If not specified the output folder is "__athena_temp__" which is recommended.
-#'
 #'@param return_athena_types Specifies if the list describing the data's meta data types should be defined using athena datatypes (TRUE) or using the data engineering team's generic metadata types (FALSE). If not specified the default value of this input parameter is set to FALSE.
 #'
 #'@param timeout Specifies How long you want your sql query to wait before it gives up (in seconds). Default parameter is NULL which will mean SQL query will not timeout and could wait forever if an issue occured.
@@ -22,7 +18,7 @@
 #'
 #'@examples
 #'# Read an sql query using readr::read_csv
-#'response <- dbtools::get_athena_query_response("SELECT * from crest_v1.flatfile limit 10000", "my-bucket")
+#'response <- dbtools::get_athena_query_response("SELECT * from crest_v1.flatfile limit 10000")
 #'
 #'# print out path to athena query output (as a csv)
 #'print(response$s3_path)
