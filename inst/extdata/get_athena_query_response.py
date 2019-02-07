@@ -20,13 +20,11 @@ def get_athena_query_response(sql_query, return_athena_types = False, timeout = 
 
     # Get role specific path for athena output
     bucket = "alpha-athena-query-dump"
-    user = os.getenv('USER', '')
-    if user == '':
-      raise ValueError('ENV variable USER could not be found. Please raise an issue on the dbtools github repo')
 
-    iam_client=boto3.client('iam')
-    role = iam_client.get_role(RoleName='alpha_user_'+user)
-    out_path = os.path.join('s3://', bucket, role['Role']['RoleId'], "__athena_temp__/")
+    sts_client=boto3.client('sts')
+    sts_resp=sts_client.get_caller_identity()
+
+    out_path = os.path.join('s3://', bucket, sts_resp['UserId'], "__athena_temp__/")
 
     if out_path[-1] != '/':
       out_path += '/'
