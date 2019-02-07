@@ -120,6 +120,10 @@ print(response$meta)
 
 #### Changelog:
 
+## v2.0.0 - 2019-02-07
+
+- Input parameters `bucket` and `output_folder` in `read_sql` and `get_athena_query_response`. New section to README named 'Under The Hood' explains why.
+
 ## v1.0.0 - 2019-01-14
 
 - Added function `read_sql` which reads an SQL query directly into an R dataframe. See R documentation (i.e. `?read_sql`)

@@ -35,6 +35,7 @@ read_sql <- function(sql_query, return_df_as='tibble', timeout = NULL){
 
   response <- dbtools::get_athena_query_response(sql_query=sql_query, return_athena_types=FALSE, timeout=timeout)
   s3_path_stripped <- gsub("s3://", "", response$s3_path)
+  bucket <- unlist(strsplit(s3_path_stripped, '/'))[1]
   s3_key <- gsub(paste0(bucket,"/"), "", s3_path_stripped)
 
   data_conversion <- dbtools:::get_data_conversion(return_df_as)
