@@ -4,7 +4,7 @@ import io
 import time
 import os
 
-def get_athena_query_response(sql_query, bucket, output_folder = "__athena_temp__/", return_athena_types = False, timeout = None) :
+def get_athena_query_response(sql_query, return_athena_types = False, timeout = None) :
 
     type_dictionary = {
         "char" : "character",
@@ -18,10 +18,18 @@ def get_athena_query_response(sql_query, bucket, output_folder = "__athena_temp_
         "double" : "double"
     }
 
-    out_path = os.path.join('s3://', bucket, output_folder)
+    # Get role specific path for athena output
+    bucket = "alpha-athena-query-dump"
+
+    sts_client=boto3.client('sts')
+    sts_resp=sts_client.get_caller_identity()
+
+    out_path = os.path.join('s3://', bucket, sts_resp['UserId'], "__athena_temp__/")
+
     if out_path[-1] != '/':
       out_path += '/'
 
+    # Run the athena query
     athena_client = boto3.client('athena', 'eu-west-1')
     response = athena_client.start_query_execution(
         QueryString=sql_query,

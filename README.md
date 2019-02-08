@@ -117,8 +117,18 @@ print(response$meta)
 - To specify a string in the sql query always use '' not "". Using ""'s means that you are referencing a database, table or col, etc.
 - When data is pulled back into rStudio the column types are either R characters (for any col that was a dates, datetimes, characters) or doubles (for everything else).
 
+#### Under The Hood
+
+When you run a query in SQL against our databases you are using Athena. When Athena produces the output of an SQL query it is always written to a location in S3 as a csv. dbtools defines the S3 location based on your AWS role. It will write the output CSV into a folder only you have read/write access to and then read it in using `s3tools`. Once the data has been read into a dataframe dbtools will delete the CSV from your folder.
+
+**Note:** dbtools requires you to have the StandardDatabaseAccess group policy attached. If you want to use dbtools please ask the data engineering team (on slack ideally via the #analytical_platform channel). 
 
 #### Changelog:
+
+## v2.0.0 - 2019-02-07
+
+- Input parameters `bucket` and `output_folder` in `read_sql` and `get_athena_query_response`. New section to README named 'Under The Hood' explains why.
+- Note package now requires the group policy `StandardDatabaseAccess` to be attached to the role that needs to use this package. 
 
 ## v1.0.0 - 2019-01-14
 

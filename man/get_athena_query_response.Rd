@@ -4,16 +4,11 @@
 \alias{get_athena_query_response}
 \title{get_athena_query_response}
 \usage{
-get_athena_query_response(sql_query, bucket,
-  output_folder = "__athena_temp__/", return_athena_types = FALSE,
+get_athena_query_response(sql_query, return_athena_types = FALSE,
   timeout = NULL)
 }
 \arguments{
 \item{sql_query}{A string specifying the SQL query you want to send to athena. See packages github readme for info on the flavour of SQL Athena uses.}
-
-\item{bucket}{The s3 bucket the query results will be written into.  You must have read and write permissions to this folder.}
-
-\item{output_folder}{The folder path where you want your athena query to be written to. If not specified the output folder is "__athena_temp__" which is recommended.}
 
 \item{return_athena_types}{Specifies if the list describing the data's meta data types should be defined using athena datatypes (TRUE) or using the data engineering team's generic metadata types (FALSE). If not specified the default value of this input parameter is set to FALSE.}
 
@@ -30,7 +25,7 @@ Will send an SQL query to athena and wait for it to complete. Once the query has
 }
 \examples{
 # Read an sql query using readr::read_csv
-response <- dbtools::get_athena_query_response("SELECT * from crest_v1.flatfile limit 10000", "my-bucket")
+response <- dbtools::get_athena_query_response("SELECT * from crest_v1.flatfile limit 10000")
 
 # print out path to athena query output (as a csv)
 print(response$s3_path)

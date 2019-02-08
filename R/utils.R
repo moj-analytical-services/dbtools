@@ -22,3 +22,13 @@ delete_object <- function(bucket, key){
   s3tools::get_credentials()
   delete_object(bucket=bucket, key=key)
 }
+
+get_iam_role <- function(){
+  user <- Sys.getenv("USER")
+  if(user==""){
+    stop("Error could not find username in env vars. Please raise an issue on the Github repo for dbtools.")
+  }
+  iam_role <- paste0("alpha_user_", user)
+  return(iam_role)
+}
+
