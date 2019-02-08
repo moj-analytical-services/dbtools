@@ -125,9 +125,9 @@ When you run a query in SQL against our databases you are using Athena. When Ath
 
 #### Changelog:
 
-## v2.0.0 - 2019-02-07
+## v2.0.0 - 2019-02-08
 
-- Input parameters `bucket` and `output_folder` in `read_sql` and `get_athena_query_response`. New section to README named 'Under The Hood' explains why.
+- Removed input parameters `bucket` and `output_folder` from `read_sql` and `get_athena_query_response` functions. New section to README named 'Under The Hood' explains why.
 - Note package now requires the group policy `StandardDatabaseAccess` to be attached to the role that needs to use this package. 
 
 ## v1.0.0 - 2019-01-14
