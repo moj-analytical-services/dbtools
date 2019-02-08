@@ -13,5 +13,7 @@ Imports:
   reticulate (>= 1.10),
   s3tools,
   readr
+Suggests:
+  data.table (>= 1.11.8)
 Remotes:
   moj-analytical-services/s3tools
