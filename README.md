@@ -69,8 +69,8 @@ Below is a table that explains what the conversion is from our data types to the
 | data type | tibble type _(R atomic type)_        | data.table type _(R atomic type)_ | dataframe type _(R atomic type)_ |
 |-----------|--------------------------------------|-----------------------------------|----------------------------------|
 | character | readr::col_character() _(character)_ | character                         | character                        |
-| int       | readr::col_integer() _(integer)_     | bit64::integer64() _(double)_     | character                        |
-| long      | readr::col_double() _(double)_       | double                            | character                        |
+| int       | readr::col_integer() _(integer)_     | integer                           | character                        |
+| long      | readr::col_double() _(double)_       | bit64::integer64() _(double)_     | character                        |
 | date      | readr::col_date() _(double)_         | character                         | character                        |
 | datetime  | readr::col_datetime() _(double)_     | character                         | character                        |
 | boolean   | readr::col_logical() _(logical)_     | logical                           | character                        |
