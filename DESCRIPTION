@@ -1,7 +1,7 @@
 Package: dbtools
 Type: Package
 Title: Uses R wrapper function to send queries to athena.
-Version: 1.0.0
+Version: 2.0.1
 Author: Karik Isichei
 Maintainer: The package maintainer <yourself@somewhere.net>
 Description: See title.
