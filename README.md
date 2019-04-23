@@ -125,6 +125,10 @@ When you run a query in SQL against our databases you are using Athena. When Ath
 
 #### Changelog:
 
+## 2.0.1 - 2019-04-23
+
+- Updated the version in the DESCRIPTION file to the correct version
+
 ## v2.0.0 - 2019-02-08
 
 - Removed input parameters `bucket` and `output_folder` from `read_sql` and `get_athena_query_response` functions. New section to README named 'Under The Hood' explains why.
