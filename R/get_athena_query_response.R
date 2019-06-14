@@ -32,12 +32,9 @@
 
 get_athena_query_response <- function(sql_query, return_athena_types=FALSE, timeout = NULL){
 
-  # Annoyingly I think you have to pull it in as the source_python function doesn't seem to be exported properly
-  # require(reticulate)
-
-  python_script <- system.file("extdata", "get_athena_query_response.py", package = "dbtools")
-  reticulate::source_python(python_script)
+  pydbtools <- reticulate::import("pydbtools")
   s3tools::get_credentials()
-  response <- get_athena_query_response(sql_query=sql_query, return_athena_types=return_athena_types, timeout=timeout)
+  response <- pydbtools$get_athena_query_response(sql_query=sql_query, return_athena_types=return_athena_types, timeout=timeout, force_ec2=TRUE)
   return(response)
 }
+
