@@ -1,9 +1,27 @@
 # dbtools
 
-This is a simple package that let's you query databases using Amazon Athena and get the s3 path to the athena out (as a csv). This is significantly faster than using the the database drivers so might be a good option when pulling in large data.
+This is a simple package that let's you query databases using Amazon Athena and get the s3 path to the athena out (as a csv). This is significantly faster than using the the database drivers so might be a good option when pulling in large data. 
 
-To install latest version
+Note this package will only work on the Analytial-Platform and requires you to be added to the `StandardDatabaseAccess` iam-policy.
+
+## Setup
+
+This package is using [pydbtools](https://github.com/moj-analytical-services/pydbtools) under the hood. And therefore make sure your R-Studio deployment is up to date and has python 3.6 or higher installed. Your python instance will need to have pydbtools installed if not follow do the following:
+
+```
+# in terminal
+pip install 'pydbtools>=v1.0.0'
+```
+
+Best way is to install is via conda:
+```
+# in terminal
+conda install -c moj-analytical-services r-dbtools 
+```
+
+To install latest version:
 ```r
+# in R
 devtools::install_github('moj-analytical-services/dbtools')
 ```
 
@@ -11,12 +29,13 @@ package requirements are:
 
 - `s3tools` _(preinstalled)_
 - `reticulate`
+- `python` _(preinstalled - version 3.6 or higher)_
+
 - `boto3` _(preinstalled)_
-- `python` _(preinstalled)_
 - `readr` _(preinstalled)_
 - `data.table` _(version 1.11.8 or above)_
 
-Examples:
+## Examples
 
 The easiest way to read in the data:
 ```r
@@ -124,6 +143,12 @@ When you run a query in SQL against our databases you are using Athena. When Ath
 **Note:** dbtools requires you to have the StandardDatabaseAccess group policy attached. If you want to use dbtools please ask the data engineering team (on slack ideally via the #analytical_platform channel). 
 
 #### Changelog:
+
+## 2.0.2 - 2019-06-14
+
+- Fixed issue where credentials would not refresh
+- Is now dependant on `pydbtools` package
+- SQL queries like `SHOW COLUMNS FROM db.table` now work for `read_sql` and return a df.
 
 ## 2.0.1 - 2019-04-23
 
