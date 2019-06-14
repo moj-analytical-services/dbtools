@@ -76,11 +76,3 @@ read_sql <- function(sql_query, return_df_as='tibble', timeout = NULL){
   dbtools:::delete_object(bucket, paste0(s3_key, ".metadata"))
   return(df)
 }
-
-df1 = read.csv('test.txt', header = F)
-colnames(df1) <- c("output")
-df2 = readr::read_csv('test.txt', col_names = F)
-colnames(df2) <- c("output")
-df3 = data.table::fread('test.txt', header = F)
-colnames(df3) <- c("output")
-
