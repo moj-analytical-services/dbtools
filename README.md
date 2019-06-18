@@ -6,11 +6,11 @@ Note this package will only work on the Analytial-Platform and requires you to b
 
 ## Setup
 
-This package is using [pydbtools](https://github.com/moj-analytical-services/pydbtools) under the hood. And therefore make sure your R-Studio deployment is up to date and has python 3.6 or higher installed. Your python instance will need to have pydbtools installed if not follow do the following:
+This package is using [pydbtools](https://github.com/moj-analytical-services/pydbtools) under the hood. And therefore make sure your R-Studio deployment is up to date and has python 3.5 or higher installed. Your python instance will need to have pydbtools (v1.0.1 or higher) installed if not follow do the following:
 
 ```
 # in terminal
-pip install 'pydbtools>=v1.0.0'
+pip install pydbtools
 ```
 
 Best way is to install is via conda:
