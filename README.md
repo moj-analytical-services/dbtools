@@ -19,12 +19,6 @@ Best way is to install is via conda:
 conda install -c moj-analytical-services r-dbtools 
 ```
 
-To install latest version:
-```r
-# in R
-devtools::install_github('moj-analytical-services/dbtools')
-```
-
 package requirements are:
 
 - `s3tools` _(preinstalled)_
