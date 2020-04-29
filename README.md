@@ -1,19 +1,22 @@
 # dbtools
 
-This is a simple package that let's you query databases using Amazon Athena and get the s3 path to the athena out (as a csv). This is significantly faster than using the the database drivers so might be a good option when pulling in large data. 
+This is a simple package that lets you query databases using Amazon Athena and get the s3 path to the athena output (as a csv). This is significantly faster than using database drivers provided by Amazon, so might be a good option when pulling in large data. 
 
-Note this package will only work on the Analytial-Platform and requires you to be added to the `StandardDatabaseAccess` iam-policy.
+Note: this package will only work on the Analytical-Platform and requires you to be added to the `StandardDatabaseAccess` iam-policy.
 
 ## Setup
 
-This package is using [pydbtools](https://github.com/moj-analytical-services/pydbtools) under the hood. And therefore make sure your R-Studio deployment is up to date and has python 3.5 or higher installed. Your python instance will need to have pydbtools (v1.0.1 or higher) installed if not follow do the following:
+This package is using the Python package [pydbtools](https://github.com/moj-analytical-services/pydbtools) under the hood. Therefore, make sure your R-Studio deployment is up to date and has python 3.5 or higher installed. 
 
-```
-# in terminal
-pip install pydbtools
+`pydbtools` should be installed automatically when installing pydbtools. If not, run the following:
+
+```r
+# in the R console
+reticulate::conda_install(envname = "rstudio", packages = "pydbtools", pip = TRUE)
 ```
 
-Best way is to install is via conda:
+The best way to install dbtools is via conda:
+
 ```
 # in terminal
 conda install -c moj-analytical-services r-dbtools 
@@ -50,7 +53,7 @@ response <- dbtools::get_athena_query_response("SELECT * from crest_v1.flatfile 
 print(response$s3_path)
 
 # print out meta data
-print(response$s3_path)
+print(response$meta)
 
 # Read in data using whatever csv reader you want (in this example using data.table::fread but reading everything as a string)
 s3_path_stripped = gsub("s3://", "", response$s3_path)
@@ -59,7 +62,7 @@ df <- s3tools::read_using(FUN = data.table::fread, s3_path=s3_path_stripped)
 
 ## Meta data conformance
 
-When using the `read_sql` function you are required to specify the type of dataframe to return:
+When using the `read_sql` function you can specify the type of dataframe to return:
 
 - tibble _(default)_
 - data.table
@@ -67,7 +70,7 @@ When using the `read_sql` function you are required to specify the type of dataf
 
 _note: to find out more on this function see the function documentation i.e. `?dbtools::read_sql`_
 
-Each is a type of dataframe in R and have different querks when converting from Athena datatypes to R datatypes.
+Each is a type of dataframe in R and have different quirks when converting from Athena datatypes to R datatypes.
 
 - *tibble:* This is the default dataframe choice as it was the only dataframe that converts dates and datetimes (aka timestamps) on read rather than requiring a second parse of the data to convert date and timestamps to their correct types from strings. This is a good option if your data is not that large and you like those tidyverse things. One downside is that long integers are actually stored as doubles (this is because tibbles currently don't support 64 bit integers - [see issue](https://github.com/tidyverse/readr/issues/633)).
 
@@ -94,7 +97,7 @@ _Note: If the R atomic type is not listed in the table above then it is the same
 
 #### Meta data
 
-The output from dbtools::get_athena_query_response(...) is a list one of it's keys is `meta`. The meta key is a list where each element in this list is the name (`name`) and data type (`type`) for each column in your athena query output. For example for this table output:
+The output from dbtools::get_athena_query_response(...) is a list one of its keys is `meta`. The meta key is a list where each element in this list is the name (`name`) and data type (`type`) for each column in your athena query output. For example for this table output:
 
 |col1|col2|
 |---|---|
@@ -132,11 +135,15 @@ print(response$meta)
 
 #### Under The Hood
 
-When you run a query in SQL against our databases you are using Athena. When Athena produces the output of an SQL query it is always written to a location in S3 as a csv. dbtools defines the S3 location based on your AWS role. It will write the output CSV into a folder only you have read/write access to and then read it in using `s3tools`. Once the data has been read into a dataframe dbtools will delete the CSV from your folder.
+When you run a query in SQL against our databases you are using Athena. When Athena produces the output of an SQL query it is always written to a location in S3 as a csv. dbtools defines the S3 location based on your AWS role. It will write the output CSV into a folder only you have read/write access to, and then read it in using `s3tools`. Once the data has been read into a dataframe dbtools will delete the CSV from your folder.
 
 **Note:** dbtools requires you to have the StandardDatabaseAccess group policy attached. If you want to use dbtools please ask the data engineering team (on slack ideally via the #analytical_platform channel). 
 
 #### Changelog:
+
+## 2.0.3 - 2020-04-29
+
+- Automatically install `pydbtools` to your environment on install
 
 ## 2.0.2 - 2019-06-14
 
