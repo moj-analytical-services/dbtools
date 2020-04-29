@@ -17,3 +17,9 @@ Suggests:
   data.table (>= 1.11.8)
 Remotes:
   moj-analytical-services/s3tools
+Config/reticulate:
+  list(
+    packages = list(
+      list(package = "pydbtools", pip = TRUE)
+    )
+  )
