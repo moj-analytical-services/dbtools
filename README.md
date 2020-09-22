@@ -144,6 +144,7 @@ When you run a query in SQL against our databases you are using Athena. When Ath
 ## 2.0.3 - 2020-04-29
 
 - Automatically install `pydbtools` to your environment on install
+- Fixed prompts to install miniconda - now automatically uses main Analytical Platform Conda Python, based on sys path
 
 ## 2.0.2 - 2019-06-14
 
