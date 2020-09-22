@@ -3,6 +3,6 @@
   python_bath = paste(base_path, "/python", sep = "")
   reticulate::use_python(python_path)
   if(!reticulate::py_module_available("pydbtools")) {
-    reticulate::conda_install(envname = "rstudio", packages = "pydbtools==2.0.0", pip = TRUE)
+    reticulate::conda_install(envname = "rstudio", packages = "pydbtools==2.0.1", pip = TRUE)
   }
 }
