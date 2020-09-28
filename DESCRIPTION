@@ -1,7 +1,7 @@
 Package: dbtools
 Type: Package
 Title: Uses R wrapper function to send queries to athena.
-Version: 2.0.2
+Version: 2.0.3
 Author: Karik Isichei
 Maintainer: The package maintainer <yourself@somewhere.net>
 Description: See title.
@@ -17,3 +17,9 @@ Suggests:
   data.table (>= 1.11.8)
 Remotes:
   moj-analytical-services/s3tools
+Config/reticulate:
+  list(
+    packages = list(
+      list(package = "pydbtools", pip = TRUE)
+    )
+  )
