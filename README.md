@@ -6,23 +6,23 @@ Note: this package will only work on the Analytical-Platform and requires you to
 
 ## Setup
 
-This package is using the Python package [pydbtools](https://github.com/moj-analytical-services/pydbtools) under the hood. Therefore, make sure your R-Studio deployment is up to date and has python 3.5 or higher installed. 
+This package uses the Python package [pydbtools](https://github.com/moj-analytical-services/pydbtools) under the hood. Make sure your R-Studio deployment is up to date and has Python 3.6 or higher installed. 
 
-`pydbtools` should be installed automatically when installing pydbtools. If not, run the following:
+Before using dbtools you'll need to install pydbtools v2.0.1 or higher. Do this from the R terminal:
 
-```r
-# in the R console
-reticulate::conda_install(envname = "rstudio", packages = "pydbtools", pip = TRUE)
+```
+# in terminal
+pip install -U pydbtools
 ```
 
-The best way to install dbtools is via conda:
+Then install dbtools itself. The best way to do this is via conda:
 
 ```
 # in terminal
 conda install -c moj-analytical-services r-dbtools 
 ```
 
-package requirements are:
+Package requirements are:
 
 - `s3tools` _(preinstalled)_
 - `reticulate`
@@ -143,8 +143,7 @@ When you run a query in SQL against our databases you are using Athena. When Ath
 
 ## 2.0.3 - 2020-04-29
 
-- Automatically install `pydbtools` to your environment on install
-- Fixed prompts to install miniconda - now automatically uses main Analytical Platform Conda Python, based on sys path
+- Fixes prompts to install miniconda - now automatically uses main Analytical Platform Conda Python, based on sys path
 
 ## 2.0.2 - 2019-06-14
 
