@@ -2,7 +2,7 @@
 
 This is a simple package that lets you query databases using Amazon Athena and get the s3 path to the athena output (as a csv). This is significantly faster than using database drivers provided by Amazon, so might be a good option when pulling in large data. 
 
-Note: this package will only work on the Analytical-Platform and requires you to be added to the `StandardDatabaseAccess` iam-policy.
+Note: this package works alongside user IAM policies on the Analytical-Platform and requires you to be added to be given a standard database access. If in our github organisation you will be able to access the repo to request standard database access [here](https://github.com/moj-analytical-services/data-engineering-database-access).
 
 ## Setup
 
