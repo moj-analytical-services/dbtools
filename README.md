@@ -12,7 +12,7 @@ Before using dbtools you'll need to install pydbtools v2.0.1 or higher. Do this 
 
 ```
 # in terminal
-pip install -U pydbtools==2.0.2
+python -m pip install -U pydbtools==2.0.2
 ```
 
 Then install dbtools itself. The best way to do this is via conda:
