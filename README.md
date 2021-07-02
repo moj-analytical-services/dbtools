@@ -8,7 +8,7 @@ Note: this package works alongside user IAM policies on the Analytical-Platform 
 
 This package uses the Python package [pydbtools](https://github.com/moj-analytical-services/pydbtools) under the hood. Make sure your R-Studio deployment is up to date and has Python 3.6 or higher installed. 
 
-Before using dbtools you'll need to install pydbtools v2.0.1 or higher. Do this from the R terminal:
+Before using dbtools you'll need to install pydbtools v2.0.2. Do this from the R terminal:
 
 ```
 # in terminal
