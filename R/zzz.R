@@ -1,6 +1,7 @@
+dbtools.env <- new.env(parent=emptyenv())
 .onLoad <- function(libname, pkgname) {
-  # Construct Python path and pass it to reticulate
-  base_path <- strsplit(Sys.getenv("PATH"), ":")[[1]][1]
-  python_path <- paste(base_path, "/python", sep = "")
-  reticulate::use_python(python_path)
+  # import Python packages on package load
+  boto3 <- reticulate::import('boto3')
+  assign('pydb', reticulate::import('pydbtools'), dbtools.env)
+  assign('athena_client', boto3$client('athena'), dbtools.env)
 }
