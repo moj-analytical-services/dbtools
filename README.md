@@ -1,5 +1,39 @@
 # dbtools
 
+Users who have yet to migrate to the newer version of the Analytical 
+Platform should refer to the [Legacy](#legacy) section below.
+
+## About
+
+A package that is used to run SQL queries configured for the 
+Analytical Platform. This packages is a [reticulated](https://rstudio.github.io/reticulate/) 
+wrapper around [pydbtools](https://github.com/moj-analytical-services/pydbtools) 
+which uses AWS Wrangler's Athena module but adds additional functionality 
+(like Jinja templating, creating temporary tables) and alters some configuration 
+to our specification.
+
+## Installation
+
+Run the following commands in the R console.
+
+```R
+# Set up the project to use renv, if not already done
+renv::init()
+# Tell renv that Python will be used
+renv::use_python()
+# Install the reticulate library to interface with Python
+renv::install("reticulate")
+# Install the Python library pydbtools
+reticulate::py_install("pydbtools")
+# Install dbtools
+renv::install("moj-analytical-services/dbtools")
+```
+
+# Legacy
+
+The information below applies to versions <3.0.0, and should be used by anyone 
+on the older version of the Analytical Platform i.e. anyone using R3.*.
+
 This is a simple package that lets you query databases using Amazon Athena and get the s3 path to the athena output (as a csv). This is significantly faster than using database drivers provided by Amazon, so might be a good option when pulling in large data. 
 
 Note: this package works alongside user IAM policies on the Analytical-Platform and requires you to be added to be given a standard database access. If in our github organisation you will be able to access the repo to request standard database access [here](https://github.com/moj-analytical-services/data-engineering-database-access).
@@ -140,6 +174,11 @@ When you run a query in SQL against our databases you are using Athena. When Ath
 **Note:** dbtools requires you to have the StandardDatabaseAccess group policy attached. If you want to use dbtools please ask the data engineering team (on slack ideally via the #analytical_platform channel). 
 
 #### Changelog:
+
+## 3.0.0 - 2022-02-03
+
+- No longer dependent on s3tools
+- Wraps `pydbtools` functions
 
 ## 2.0.3 - 2020-04-29
 
