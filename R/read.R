@@ -40,7 +40,7 @@ convert_athena_type_to_arrow <- function(t) {
 }
 
 
-#' Send an SQL query to Athena and receive a data frame.
+#' Send an SQL query to Athena and receive a tibble.
 #'
 #' @param sql An SQL query
 #'
@@ -50,34 +50,48 @@ convert_athena_type_to_arrow <- function(t) {
 #' @examples
 #' `df <- dbtools::read_sql_query('select * from my_db.my_table)`
 read_sql_query <- function(sql) {
-  query_id <- dbtools.env$pydb$start_query_execution(sql)
-  dbtools.env$pydb$wait_query(query_id)
-  athena_status <- dbtools.env$pydb$get_query_execution(query_id)
-  athena_client <- dbtools.env$boto3$client('athena')
-  response <- dbtools.env$athena_client$get_query_results(
-    QueryExecutionId=query_id
-  )
+  # This approach doesn't work because for some reason pydbtools and boto3
+  # stopped playing well together under reticulate, with boto3 throwing a
+  # permissions error which doesn't occur in pure Python. Leaving this code here
+  # in case it gets fixed as it would be much quicker.
+  #
+  # query_id <- dbtools.env$pydb$start_query_execution(sql)
+  # dbtools.env$pydb$wait_query(query_id)
+  # athena_status <- dbtools.env$pydb$get_query_execution(query_id)
+  #
+  # if (athena_status$Status$State == 'FAILED') {
+  #   stop('SQL query failed with response error;\n',
+  #        athena_status$Status$StateChangeReason)
+  # }
+  #
+  # response <- dbtools.env$boto3$client('athena')$get_query_results(
+  #   QueryExecutionId=athena_status$QueryExecutionId
+  # )
+  #
+  # # Create arrow schema as a list of arrow::Fields
+  # schema <- list()
+  # for (col_info in response$ResultSet$ResultSetMetadata$ColumnInfo) {
+  #   schema <- append(
+  #     schema,
+  #     list(arrow::field(col_info$Name,
+  #                       convert_athena_type_to_arrow(col_info$Type)))
+  #   )
+  # }
+  #
+  # df <- arrow::read_csv_arrow(
+  #   athena_status$ResultConfiguration$OutputLocation,
+  #   schema=schema,
+  #   convert_options=arrow::CsvConvertOptions$create(strings_can_be_null=TRUE)
+  # )
 
-  if (athena_status$Status$State == 'FAILED') {
-    stop('SQL query failed with response error;\n',
-         athena_status$Status$StateChangeReason)
-  }
 
-  # Create arrow schema as a list of arrow::Fields
-  schema <- list()
-  for (col_info in response$ResultSet$ResultSetMetadata$ColumnInfo) {
-    schema <- append(
-      schema,
-      list(arrow::field(col_info$Name,
-                        convert_athena_type_to_arrow(col_info$Type)))
-    )
-  }
-
-  df <- arrow::read_csv_arrow(
-    athena_status$ResultConfiguration$OutputLocation,
-    schema=schema,
-    convert_options=arrow::CsvConvertOptions$create(strings_can_be_null=TRUE)
-  )
+  # Download the dataframe result to a parquet temporary file as pandas and
+  # reticulate are frequently incompatible, and load the data into R using
+  # arrow.
+  tmp_location <- tempfile(fileext=".parquet")
+  read_sql_query_py(sql, tmp_location)
+  df <- arrow::read_parquet(tmp_location)
+  unlink(tmp_location)
   return(df)
 }
 
@@ -103,8 +117,8 @@ read_sql_query <- function(sql) {
 #' ```
 read_sql <- function(sql_query, return_df_as="tibble") {
   df <- read_sql_query(sql_query)
-  if (return_df_as == "tibble") {
-    return(tibble::as_tibble(df))
+  if (return_df_as == "dataframe") {
+    return(as.data.frame(df))
   } else if (return_df_as == "data.table") {
     return(data.table::as.data.table(df))
   } else {

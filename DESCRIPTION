@@ -15,7 +15,8 @@ Imports:
 Suggests:
     knitr,
     data.table (>= 1.11.8),
-    rmarkdown
+    rmarkdown,
+    tibble
 Remotes:
   moj-analytical-services/s3tools
 VignetteBuilder: knitr

@@ -29,6 +29,60 @@ reticulate::py_install("pydbtools")
 renv::install("moj-analytical-services/dbtools")
 ```
 
+## Quickstart guide
+
+### Read an SQL Athena query into an R dataframe
+
+```r
+library(dbtools)
+
+df <- read_sql_query("SELECT * from a_database.table LIMIT 10")
+```
+
+### Run a query in Athena
+
+```r
+response <- dbtools::start_query_execution_and_wait(
+  "CREATE DATABASE IF NOT EXISTS my_test_database"
+)
+```
+
+### Create temporary tables to do further separate SQL queries on later
+
+```r
+dbtools::create_temp_table(
+  "SELECT a_col, count(*) as n FROM a_database.table GROUP BY a_col", 
+  table_name="temp_table_1"
+)
+df <- dbtools::read_sql_query("SELECT * FROM __temp__.temp_table_1 WHERE n < 10")
+```
+
+### Delete databases, tables and partitions together with the data on S3
+
+```r
+dbtools::delete_partitions_and_data(
+  database='my_database', 
+  table='my_table', 
+  expression='year = 2020 or year = 2021'
+)
+dbtools::delete_table_and_data(database='my_database', table='my_table')
+dbtools::delete_database('my_database')
+
+# These can be used for temporary databases and tables.
+dbtools::delete_table_and_data(database='__temp__', table='my_temp_table')
+```
+
+### Use Jinja templating to inject arguments into your SQL
+
+```r
+sql_template <- "SELECT * FROM {{ db_name }}.{{ table }}"
+sql <- dbtools::render_sql_template(sql_template, {"db_name": db_name, "table": "department"})
+df <- dbtools::read_sql_query(sql)
+
+cat("SELECT * FROM {{ db_name }}.{{ table_name }}", file="tempfile.sql")
+sql <- pydb.get_sql_from_file("tempfile.sql", jinja_args={"db_name": db_name, "table_name": "department"})
+pydb.read_sql_query(sql)
+
 # Legacy
 
 The information below applies to versions <3.0.0, and should be used by anyone 

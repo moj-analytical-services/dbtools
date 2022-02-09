@@ -3,16 +3,13 @@
 #' @param sql: The SQL table you want to create a temp table out of. Should
 #'   be a table that starts with a WITH or SELECT clause.
 #' @param table_name The name of the temp table you wish to create
-#' @param region_name Name of the AWS region you want to run queries on.
-#'   Defaults to pydbtools.utils.aws_default_region (which if left unset is
-#'   "eu-west-1").
 #'
 #' @export
 #'
 #' @examples
 #' `dbtools::create_temp_table("SELECT a_col, count(*) as n FROM a_database.table GROUP BY a_col", table_name="temp_table_1")`
-create_temp_table <- function(sql, table_name, region_name) {
-  dbtools.env$pydb$create_temp_table(sql, table_name, region_name=region_name)
+create_temp_table <- function(sql, table_name) {
+  dbtools.env$pydb$create_temp_table(sql, table_name)
 }
 
 #' Show the list of columns, including partition columns: 'DESCRIBE table;'.
@@ -162,7 +159,7 @@ delete_partitions_and_data <- function(database, table, expression) {
 #' @examples
 #' `dbtools::delete_table_and_data("__temp__", "my_table")`
 delete_table_and_data <- function(database, table) {
-  dbtools.env$pydb$delete_table_and_data(database, table)
+  dbtools.env$pydb$delete_table_and_data(table, database)
 }
 
 #' Deletes both an Athena database and the underlying data on S3.
