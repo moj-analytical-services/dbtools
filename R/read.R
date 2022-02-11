@@ -89,7 +89,7 @@ read_sql_query <- function(sql) {
   # reticulate are frequently incompatible, and load the data into R using
   # arrow.
   tmp_location <- tempfile(fileext=".parquet")
-  read_sql_query_py(sql, tmp_location)
+  dbtools.env$pydb$save_query_to_parquet(sql, tmp_location)
   df <- arrow::read_parquet(tmp_location)
   unlink(tmp_location)
   return(df)
