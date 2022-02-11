@@ -19,4 +19,6 @@ def read_sql_query_py(sql: str, file_location: str) -> None:
   df = pydb.read_sql_query(sql)
   df.to_parquet(file_location)
 
+  return None
+
 
