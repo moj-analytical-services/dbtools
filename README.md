@@ -15,11 +15,11 @@ Before using dbtools you'll need to install pydbtools v2.0.2. Do this from the R
 python -m pip install -U pydbtools==2.0.2
 ```
 
-Then install dbtools itself. The best way to do this is via conda:
+Then install dbtools itself:
 
 ```
-# in terminal
-conda install -c moj-analytical-services r-dbtools 
+# in R console
+remotes::install_github('moj-analytical-services/dbtools')
 ```
 
 Package requirements are:
