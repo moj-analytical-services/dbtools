@@ -3,7 +3,6 @@ Type: Package
 Title: Uses R wrapper function to send queries to athena.
 Version: 3.0.0
 Author: Karik Isichei
-Maintainer: The package maintainer <yourself@somewhere.net>
 Description: See title.
 License: MIT + file LICENSE
 Encoding: UTF-8
