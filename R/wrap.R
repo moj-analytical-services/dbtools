@@ -140,7 +140,7 @@ start_query_execution_and_wait <- function(sql) {
 #' @param table The table name.
 #' @param expression The expression to match.
 #'
-#' @see https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/glue.html#Glue.Client.get_partitions
+#' @seealso https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/glue.html#Glue.Client.get_partitions
 #' @export
 #'
 #' @examples
@@ -180,8 +180,6 @@ delete_database_and_data <- function(database) {
 #'
 #' @return
 #' @export
-#'
-#' @examples
 get_sql_from_file <- function(filepath, jinja_args=NULL) {
   dbtools.env$pydb$get_sql_from_file(filepath, jinja_args)
 }

@@ -15,3 +15,8 @@ An Arrow type
 \description{
 Convert an Athena type to an Arrow type
 }
+\seealso{
+https://docs.aws.amazon.com/athena/latest/ug/data-types.html
+
+https://arrow.apache.org/docs/r/reference/data-type.html
+}

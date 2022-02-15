@@ -2,7 +2,7 @@
 % Please edit documentation in R/read.R
 \name{read_sql_query}
 \alias{read_sql_query}
-\title{Send an SQL query to Athena and receive a data frame.}
+\title{Send an SQL query to Athena and receive a dataframe.}
 \usage{
 read_sql_query(sql)
 }
@@ -13,5 +13,8 @@ read_sql_query(sql)
 Dataframe
 }
 \description{
-Send an SQL query to Athena and receive a data frame.
+Send an SQL query to Athena and receive a dataframe.
+}
+\examples{
+`df <- dbtools::read_sql_query('select * from my_db.my_table')`
 }

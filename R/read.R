@@ -5,8 +5,8 @@
 #' @return An Arrow type
 #' @export
 #'
-#' @see https://docs.aws.amazon.com/athena/latest/ug/data-types.html
-#' @see https://arrow.apache.org/docs/r/reference/data-type.html
+#' @seealso https://docs.aws.amazon.com/athena/latest/ug/data-types.html
+#' @seealso https://arrow.apache.org/docs/r/reference/data-type.html
 convert_athena_type_to_arrow <- function(t) {
   # Regular expression matches either e.g. decimal(10) or decimal(10, 5)
   decimal_match <- stringr::str_match(
@@ -40,7 +40,7 @@ convert_athena_type_to_arrow <- function(t) {
 }
 
 
-#' Send an SQL query to Athena and receive a tibble.
+#' Send an SQL query to Athena and receive a dataframe.
 #'
 #' @param sql An SQL query
 #'
@@ -48,7 +48,7 @@ convert_athena_type_to_arrow <- function(t) {
 #' @export
 #'
 #' @examples
-#' `df <- dbtools::read_sql_query('select * from my_db.my_table)`
+#' `df <- dbtools::read_sql_query('select * from my_db.my_table')`
 read_sql_query <- function(sql) {
   # This approach doesn't work because for some reason pydbtools and boto3
   # stopped playing well together under reticulate, with boto3 throwing a
@@ -95,7 +95,7 @@ read_sql_query <- function(sql) {
   return(df)
 }
 
-#' @description Uses boto3 (in python) to send an sql query to athena and return an R dataframe, tibble or data.table based on user preference.
+#' Uses boto3 (in python) to send an sql query to athena and return an R dataframe, tibble or data.table based on user preference.
 #'
 #' @export
 #'
@@ -122,6 +122,6 @@ read_sql <- function(sql_query, return_df_as="tibble") {
   } else if (return_df_as == "data.table") {
     return(data.table::as.data.table(df))
   } else {
-    return(df)
+    return(tibble::as_tibble(df))
   }
 }

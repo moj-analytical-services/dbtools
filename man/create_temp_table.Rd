@@ -4,14 +4,10 @@
 \alias{create_temp_table}
 \title{Create a temporary table}
 \usage{
-create_temp_table(sql, table_name, region_name)
+create_temp_table(sql, table_name)
 }
 \arguments{
 \item{table_name}{The name of the temp table you wish to create}
-
-\item{region_name}{Name of the AWS region you want to run queries on.
-Defaults to pydbtools.utils.aws_default_region (which if left unset is
-"eu-west-1").}
 
 \item{sql:}{The SQL table you want to create a temp table out of. Should
 be a table that starts with a WITH or SELECT clause.}

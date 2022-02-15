@@ -21,3 +21,6 @@ database table matching an expression.
 \examples{
 `dbtools::delete_partitions_and_data("my_database", "my_table", "year = 2020 and month = 5")`
 }
+\seealso{
+https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/glue.html#Glue.Client.get_partitions
+}
