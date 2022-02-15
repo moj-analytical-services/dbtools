@@ -36,7 +36,7 @@ renv::install("moj-analytical-services/dbtools")
 
 ## Quickstart guide
 
-There is a [vignette](doc/dbtools.html) with more details but the following
+There is a [vignette](doc/dbtools.pdf) with more details but the following
 describes the basics of the package.
 
 ### Read an SQL Athena query into an R dataframe
