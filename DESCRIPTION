@@ -18,6 +18,4 @@ Suggests:
     data.table (>= 1.11.8),
     rmarkdown,
     tibble
-Remotes:
-  moj-analytical-services/s3tools
 VignetteBuilder: knitr
