@@ -44,7 +44,7 @@ convert_athena_type_to_arrow <- function(t) {
 #'
 #' @param sql An SQL query
 #'
-#' @return Dataframe
+#' @return Dataframe or tibble if the tibble library is loaded.
 #' @export
 #'
 #' @examples

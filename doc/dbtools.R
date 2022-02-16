@@ -13,7 +13,7 @@ read_sql_query("select * from aws_example_dbtools.employees limit 5")
 
 ## -----------------------------------------------------------------------------
 read_sql("select * from aws_example_dbtools.department limit 5",
-         return_df_as="dataframe")
+         return_df_as="tibble")
 
 ## -----------------------------------------------------------------------------
 read_sql("select * from aws_example_dbtools.sales limit 5",

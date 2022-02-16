@@ -75,18 +75,18 @@ library(dbtools)
 
 ## Reading SQL queries
 
-The `read_sql_query` function is used to obtain R tibbles from SQL queries
+The `read_sql_query` function is used to obtain R dataframes from SQL queries
 sent to Athena.
 
 ```{r}
 read_sql_query("select * from aws_example_dbtools.employees limit 5")
 ```
 
-If a standard data frame is preferred the `read_sql` function is provided
+If a tibble is preferred the `read_sql` function is provided
 
 ```{r}
 read_sql("select * from aws_example_dbtools.department limit 5",
-         return_df_as="dataframe")
+         return_df_as="tibble")
 ```
 
 or for a `data.table`
@@ -95,6 +95,7 @@ or for a `data.table`
 read_sql("select * from aws_example_dbtools.sales limit 5",
          return_df_as="data.table")
 ```
+
 
 ## Creating temporary SQL tables
 
@@ -142,7 +143,8 @@ read_sql_query(sql)
 Sometimes you will want to run similar SQL queries which differ only by,
 for example, table or column names. In these cases 
 SQL templates can be created to SQL queries populated by templated variables,
-using Jinja templating. For example,
+using Jinja2 templating (https://jinja2docs.readthedocs.io/en/stable/index.html). 
+For example,
 
 ```{r}
 sql_template = "select * from {{ db_name }}.{{ table }} limit 10"
@@ -235,7 +237,10 @@ read_sql_query("select * from new_db_dbtools.sales_report")
 
 ### Creating a table with partitions
 
-Do the same as before but partition the data based on when the report was run.
+Do the same as before but partition the data based on when the report was run. 
+This can make queries more efficient as filtering on the partition columns
+reduces the amount of data scanned, plus makes incrementally adding data
+easier.
 
 ```{r}
 sql <- "

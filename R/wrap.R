@@ -44,6 +44,7 @@ get_query_columns_types <- function(query_id) {
 #' @param query_id Athena query execution ID
 #'
 #' @return List with the get_query_execution response.
+#' @seealso https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/athena.html#Athena.Client.get_query_execution
 #' @export
 #'
 #' @examples
@@ -93,6 +94,7 @@ show_create_table <- function(table, database) {
 #' @param wait Default FALSE, indicates whether to wait for the query to finish and return a dictionary with the query execution response.
 #'
 #' @return Query execution ID if `wait` is set to `False`, list with the get_query_execution response otherwise.
+#' @seealso https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/athena.html#Athena.Client.get_query_execution
 #' @export
 start_query_execution <- function(sql, wait=FALSE) {
   dbtools.env$pydb$start_query_execution(sql, wait)
@@ -112,6 +114,7 @@ stop_query_execution <- function(query_id) {
 #' @param query_id Athena query execution ID
 #'
 #' @return List with the get_query_execution response
+#' @seealso https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/athena.html#Athena.Client.get_query_execution
 #' @export
 #'
 #' @examples
@@ -125,6 +128,7 @@ wait_query <- function(query_id) {
 #' @param sql An SQL string. Which works with __TEMP__ references.
 #'
 #' @return List with the get_query_execution response.
+#' @seealso https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/athena.html#Athena.Client.get_query_execution
 #' @export
 #'
 #' @examples
