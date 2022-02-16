@@ -1,45 +1,3 @@
-#' Convert an Athena type to an Arrow type
-#'
-#' @param t A string giving an Athena type
-#'
-#' @return An Arrow type
-#' @export
-#'
-#' @seealso https://docs.aws.amazon.com/athena/latest/ug/data-types.html
-#' @seealso https://arrow.apache.org/docs/r/reference/data-type.html
-convert_athena_type_to_arrow <- function(t) {
-  # Regular expression matches either e.g. decimal(10) or decimal(10, 5)
-  decimal_match <- stringr::str_match(
-    t,
-    "decimal\\(([:digit:]+)(\\s*,\\s*([:digit:]+))?\\)"
-  )
-  if (!is.na(decimal_match[1])) {
-    precision <- as.numeric(decimal_match[2])
-    # Set scale to default 0 if not present
-    scale <- ifelse(is.na(decimal_match[4]), 0, as.numeric(decimal_match[4]))
-    return(arrow::decimal(precision, scale))
-  }
-
-  switch(
-    t,
-    "boolean" = arrow::bool(),
-    "tinyint" = arrow::int8(),
-    "smallint" = arrow::int16(),
-    "int" = arrow::int32(),
-    "integer" = arrow::int32(),
-    "bigint" = arrow::int64(),
-    "double" = arrow::float64(),
-    "float" = arrow::float32(),
-    "char" = arrow::string(),
-    "string" = arrow::string(),
-    "binary" = arrow::binary(),
-    "date" = arrow::date32(),
-    "timestamp" = arrow::timestamp(unit="ms", timezone="UTC"),
-    arrow::string()
-  ) %>% return
-}
-
-
 #' Send an SQL query to Athena and receive a dataframe.
 #'
 #' @param sql An SQL query
@@ -50,41 +8,6 @@ convert_athena_type_to_arrow <- function(t) {
 #' @examples
 #' `df <- dbtools::read_sql_query('select * from my_db.my_table')`
 read_sql_query <- function(sql) {
-  # This approach doesn't work because for some reason pydbtools and boto3
-  # stopped playing well together under reticulate, with boto3 throwing a
-  # permissions error which doesn't occur in pure Python. Leaving this code here
-  # in case it gets fixed as it would be much quicker.
-  #
-  # query_id <- dbtools.env$pydb$start_query_execution(sql)
-  # dbtools.env$pydb$wait_query(query_id)
-  # athena_status <- dbtools.env$pydb$get_query_execution(query_id)
-  #
-  # if (athena_status$Status$State == 'FAILED') {
-  #   stop('SQL query failed with response error;\n',
-  #        athena_status$Status$StateChangeReason)
-  # }
-  #
-  # response <- dbtools.env$boto3$client('athena')$get_query_results(
-  #   QueryExecutionId=athena_status$QueryExecutionId
-  # )
-  #
-  # # Create arrow schema as a list of arrow::Fields
-  # schema <- list()
-  # for (col_info in response$ResultSet$ResultSetMetadata$ColumnInfo) {
-  #   schema <- append(
-  #     schema,
-  #     list(arrow::field(col_info$Name,
-  #                       convert_athena_type_to_arrow(col_info$Type)))
-  #   )
-  # }
-  #
-  # df <- arrow::read_csv_arrow(
-  #   athena_status$ResultConfiguration$OutputLocation,
-  #   schema=schema,
-  #   convert_options=arrow::CsvConvertOptions$create(strings_can_be_null=TRUE)
-  # )
-
-
   # Download the dataframe result to a parquet temporary file as pandas and
   # reticulate are frequently incompatible, and load the data into R using
   # arrow.

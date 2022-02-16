@@ -10,7 +10,7 @@ read_sql_query(sql)
 \item{sql}{An SQL query}
 }
 \value{
-Dataframe
+Dataframe or tibble if the tibble library is loaded.
 }
 \description{
 Send an SQL query to Athena and receive a dataframe.

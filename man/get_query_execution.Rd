@@ -18,3 +18,6 @@ Fetch query execution details.
 \examples{
 `res <- dbtools::get_query_execution(query_id='query-execution-id')`
 }
+\seealso{
+https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/athena.html#Athena.Client.get_query_execution
+}

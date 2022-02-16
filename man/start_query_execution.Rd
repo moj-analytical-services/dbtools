@@ -17,3 +17,6 @@ Query execution ID if `wait` is set to `False`, list with the get_query_executio
 \description{
 Start a SQL Query against AWS Athena
 }
+\seealso{
+https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/athena.html#Athena.Client.get_query_execution
+}

@@ -18,3 +18,6 @@ Calls start_query_execution followed by wait_query.
 \examples{
 `res <- dbtools::start_query_execution_and_wait('select * from __temp__.my_table')`
 }
+\seealso{
+https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/athena.html#Athena.Client.get_query_execution
+}

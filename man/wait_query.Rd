@@ -18,3 +18,6 @@ Wait for a query to end.
 \examples{
 `res <- dbtools::wait_query(query_id)`
 }
+\seealso{
+https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/athena.html#Athena.Client.get_query_execution
+}
