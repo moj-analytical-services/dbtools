@@ -6,7 +6,7 @@ Platform should refer to the [Legacy](#legacy) section below.
 ## About
 
 A package that is used to run SQL queries configured for the 
-Analytical Platform. This packages is a [reticulated](https://rstudio.github.io/reticulate/) 
+Analytical Platform. This package is a [reticulated](https://rstudio.github.io/reticulate/) 
 wrapper around [pydbtools](https://github.com/moj-analytical-services/pydbtools) 
 which uses AWS Wrangler's Athena module but adds additional functionality 
 (like Jinja templating, creating temporary tables) and alters some configuration 
