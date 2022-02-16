@@ -54,44 +54,36 @@ read_sql_query <- function(sql) {
   # stopped playing well together under reticulate, with boto3 throwing a
   # permissions error which doesn't occur in pure Python. Leaving this code here
   # in case it gets fixed as it would be much quicker.
-  #
-  # query_id <- dbtools.env$pydb$start_query_execution(sql)
-  # dbtools.env$pydb$wait_query(query_id)
-  # athena_status <- dbtools.env$pydb$get_query_execution(query_id)
-  #
-  # if (athena_status$Status$State == 'FAILED') {
-  #   stop('SQL query failed with response error;\n',
-  #        athena_status$Status$StateChangeReason)
-  # }
-  #
-  # response <- dbtools.env$boto3$client('athena')$get_query_results(
-  #   QueryExecutionId=athena_status$QueryExecutionId
-  # )
-  #
-  # # Create arrow schema as a list of arrow::Fields
-  # schema <- list()
-  # for (col_info in response$ResultSet$ResultSetMetadata$ColumnInfo) {
-  #   schema <- append(
-  #     schema,
-  #     list(arrow::field(col_info$Name,
-  #                       convert_athena_type_to_arrow(col_info$Type)))
-  #   )
-  # }
-  #
-  # df <- arrow::read_csv_arrow(
-  #   athena_status$ResultConfiguration$OutputLocation,
-  #   schema=schema,
-  #   convert_options=arrow::CsvConvertOptions$create(strings_can_be_null=TRUE)
-  # )
 
+  query_id <- dbtools.env$pydb$start_query_execution(sql)
+  dbtools.env$pydb$wait_query(query_id)
+  athena_status <- dbtools.env$pydb$get_query_execution(query_id)
 
-  # Download the dataframe result to a parquet temporary file as pandas and
-  # reticulate are frequently incompatible, and load the data into R using
-  # arrow.
-  tmp_location <- tempfile(fileext=".parquet")
-  dbtools.env$pydb$save_query_to_parquet(sql, tmp_location)
-  df <- arrow::read_parquet(tmp_location)
-  unlink(tmp_location)
+  if (athena_status$Status$State == 'FAILED') {
+    stop('SQL query failed with response error;\n',
+         athena_status$Status$StateChangeReason)
+  }
+
+  response <- dbtools.env$boto3$client('athena')$get_query_results(
+    QueryExecutionId=athena_status$QueryExecutionId
+  )
+
+  # Create arrow schema as a list of arrow::Fields
+  schema <- list()
+  for (col_info in response$ResultSet$ResultSetMetadata$ColumnInfo) {
+    schema <- append(
+      schema,
+      list(arrow::field(col_info$Name,
+                        convert_athena_type_to_arrow(col_info$Type)))
+    )
+  }
+
+  df <- arrow::read_csv_arrow(
+    athena_status$ResultConfiguration$OutputLocation,
+    schema=schema,
+    convert_options=arrow::CsvConvertOptions$create(strings_can_be_null=TRUE)
+  )
+
   return(df)
 }
 
