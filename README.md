@@ -1,5 +1,102 @@
 # dbtools
 
+Users who have yet to migrate to the newer version of the Analytical 
+Platform should refer to the [Legacy](#legacy) section below.
+
+## About
+
+A package that is used to run SQL queries configured for the 
+Analytical Platform. This package is a [reticulated](https://rstudio.github.io/reticulate/) 
+wrapper around [pydbtools](https://github.com/moj-analytical-services/pydbtools) 
+which uses AWS Wrangler's Athena module but adds additional functionality 
+(like Jinja templating, creating temporary tables) and alters some configuration 
+to our specification.
+
+Alternatively you might want to use 
+[Rdbtools](https://github.com/moj-analytical-services/Rdbtools), which has the 
+advantages of being R-native, so no messing with `reticulate` and Python, and 
+supporting `dbplyr`. Please note the caveat about support, though.
+
+## Installation
+
+Run the following commands in the R console.
+
+```R
+# Set up the project to use renv, if not already done
+renv::init()
+# Tell renv that Python will be used
+renv::use_python()
+# Install the reticulate library to interface with Python
+renv::install("reticulate")
+# Install the Python library pydbtools
+reticulate::py_install("pydbtools")
+# Install dbtools
+renv::install("moj-analytical-services/dbtools")
+```
+
+## Quickstart guide
+
+There is a [vignette](doc/dbtools.pdf) with more details but the following
+describes the basics of the package.
+
+### Read an SQL Athena query into an R dataframe
+
+```r
+library(dbtools)
+
+df <- read_sql_query("SELECT * from a_database.table LIMIT 10")
+```
+
+### Run a query in Athena
+
+```r
+response <- dbtools::start_query_execution_and_wait(
+  "CREATE DATABASE IF NOT EXISTS my_test_database"
+)
+```
+
+### Create temporary tables to do further separate SQL queries on later
+
+```r
+dbtools::create_temp_table(
+  "SELECT a_col, count(*) as n FROM a_database.table GROUP BY a_col", 
+  table_name="temp_table_1"
+)
+df <- dbtools::read_sql_query("SELECT * FROM __temp__.temp_table_1 WHERE n < 10")
+```
+
+### Delete databases, tables and partitions together with the data on S3
+
+```r
+dbtools::delete_partitions_and_data(
+  database='my_database', 
+  table='my_table', 
+  expression='year = 2020 or year = 2021'
+)
+dbtools::delete_table_and_data(database='my_database', table='my_table')
+dbtools::delete_database('my_database')
+
+# These can be used for temporary databases and tables.
+dbtools::delete_table_and_data(database='__temp__', table='my_temp_table')
+```
+
+### Use Jinja templating to inject arguments into your SQL
+
+```r
+sql_template <- "SELECT * FROM {{ db_name }}.{{ table }}"
+sql <- dbtools::render_sql_template(sql_template, {"db_name": db_name, "table": "department"})
+df <- dbtools::read_sql_query(sql)
+
+cat("SELECT * FROM {{ db_name }}.{{ table_name }}", file="tempfile.sql")
+sql <- pydb.get_sql_from_file("tempfile.sql", jinja_args={"db_name": db_name, "table_name": "department"})
+pydb.read_sql_query(sql)
+```
+
+# Legacy
+
+The information below applies to versions <3.0.0, and should be used by anyone 
+on the older version of the Analytical Platform i.e. anyone using R3.*.
+
 This is a simple package that lets you query databases using Amazon Athena and get the s3 path to the athena output (as a csv). This is significantly faster than using database drivers provided by Amazon, so might be a good option when pulling in large data. 
 
 Note: this package works alongside user IAM policies on the Analytical-Platform and requires you to be added to be given a standard database access. If in our github organisation you will be able to access the repo to request standard database access [here](https://github.com/moj-analytical-services/data-engineering-database-access).
@@ -140,6 +237,11 @@ When you run a query in SQL against our databases you are using Athena. When Ath
 **Note:** dbtools requires you to have the StandardDatabaseAccess group policy attached. If you want to use dbtools please ask the data engineering team (on slack ideally via the #analytical_platform channel). 
 
 #### Changelog:
+
+## 3.0.0 - 2022-02-03
+
+- No longer dependent on s3tools
+- Wraps `pydbtools` functions
 
 ## 2.0.3 - 2020-04-29
 

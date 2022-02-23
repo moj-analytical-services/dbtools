@@ -1,2 +1,8 @@
+^requirements\.txt$
+^renv$
+^renv\.lock$
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^LICENSE\.md$
+^doc$
+^Meta$
