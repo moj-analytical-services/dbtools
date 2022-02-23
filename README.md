@@ -88,8 +88,8 @@ sql <- dbtools::render_sql_template(sql_template, {"db_name": db_name, "table": 
 df <- dbtools::read_sql_query(sql)
 
 cat("SELECT * FROM {{ db_name }}.{{ table_name }}", file="tempfile.sql")
-sql <- pydb.get_sql_from_file("tempfile.sql", jinja_args={"db_name": db_name, "table_name": "department"})
-pydb.read_sql_query(sql)
+sql <- dbtools::get_sql_from_file("tempfile.sql", jinja_args={"db_name": db_name, "table_name": "department"})
+dbtools::read_sql_query(sql)
 ```
 
 # Legacy
