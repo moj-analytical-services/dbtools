@@ -20,7 +20,7 @@ Run the following commands in the R console.
 
 ```R
 # Make sure you're using the latest package versions
-options(repos = "cran.rstudio.com")
+options(repos = "https://cran.rstudio.com")
 # Set up the project to use renv, if not already done
 renv::init()
 # Tell renv that Python will be used
