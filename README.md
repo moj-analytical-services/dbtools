@@ -16,7 +16,7 @@ supporting `dbplyr`. Please note the caveat about support, though.
 
 ## Installation
 
-Run the following commands in the R console.
+Run the following commands in the R console. I can only apologise that this is so complicated.
 
 ```R
 # Make sure you're using the latest package versions
