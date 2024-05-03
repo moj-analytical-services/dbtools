@@ -32,13 +32,8 @@ reticulate::py_install("pydbtools")
 # Install arrow binaries from RStudio package manager to avoid
 # spending a long time compiling libarrow
 renv::install("arrow", repos = "https://packagemanager.rstudio.com/all/__linux__/focal/latest")
-# Temporarily downgrade pyarrow to get round test failure from
-# temporary location
-reticulate::py_install("pyarrow==11.0.0")
 # Install dbtools
 renv::install("moj-analytical-services/dbtools")
-# Update pyarrow to latest
-reticulate::py_install("pyarrow")
 ```
 
 ## Quickstart guide
