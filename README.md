@@ -9,10 +9,10 @@ which uses AWS Wrangler's Athena module but adds additional functionality
 (like Jinja templating, creating temporary tables) and alters some configuration 
 to our specification.
 
-Alternatively you might want to use 
+Alternatively you probably want to use 
 [Rdbtools](https://github.com/moj-analytical-services/Rdbtools), which has the 
 advantages of being R-native, so no messing with `reticulate` and Python, and 
-supporting `dbplyr`. Please note the caveat about support, though.
+supporting `dbplyr`.
 
 ## Installation
 
