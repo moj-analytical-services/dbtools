@@ -27,6 +27,9 @@ renv::use_python()
 renv::install("reticulate")
 # Install the Python library pydbtools
 reticulate::py_install("pydbtools")
+# Install arrow binaries from RStudio package manager to avoid
+# spending a long time compiling libarrow
+renv::install("arrow", repos = "https://packagemanager.rstudio.com/all/__linux__/focal/latest")
 # Install dbtools
 renv::install("moj-analytical-services/dbtools")
 ```
