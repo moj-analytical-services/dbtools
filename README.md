@@ -11,8 +11,8 @@ to our specification.
 
 Alternatively you probably want to use 
 [Rdbtools](https://github.com/moj-analytical-services/Rdbtools), which has the 
-advantages of being R-native, so no messing with `reticulate` and Python, and 
-supporting `dbplyr`.
+advantages of supporting `dbplyr` and being R-native, so there's no messing with `reticulate` 
+and Python which cause endless problems.
 
 ## Installation
 
