@@ -16,7 +16,22 @@ supporting `dbplyr`. Please note the caveat about support, though.
 
 ## Installation
 
-Run the following commands in the R console. I can only apologise that this is so complicated.
+Run the following commands in the R console for R 4.4.0 and above. 
+
+```R
+# Set up the project to use renv, if not already done
+renv::init()
+# Tell renv that Python will be used
+renv::use_python()
+# Install the reticulate library to interface with Python
+renv::install("reticulate")
+# Install the Python library pydbtools
+reticulate::py_install("pydbtools")
+# Install dbtools
+renv::install("moj-analytical-services/dbtools")
+```
+
+If you're using an Analytical Platform version of R below 4.4.0 please run these commands.
 
 ```R
 # Make sure you're using the latest package versions
