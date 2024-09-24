@@ -19,8 +19,6 @@ and Python which cause endless problems.
 Run the following commands in the R console.  
 
 ```R
-# Make sure you're using the latest package versions
-options(repos = "https://cran.rstudio.com")
 # Set up the project to use renv, if not already done
 renv::init()
 # Tell renv that Python will be used
@@ -29,9 +27,6 @@ renv::use_python()
 renv::install("reticulate")
 # Install the Python library pydbtools
 reticulate::py_install("pydbtools")
-# Install arrow binaries from RStudio package manager to avoid
-# spending a long time compiling libarrow
-renv::install("arrow", repos = "https://packagemanager.rstudio.com/all/__linux__/focal/latest")
 # Install dbtools
 renv::install("moj-analytical-services/dbtools")
 ```
