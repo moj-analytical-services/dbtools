@@ -36,5 +36,5 @@ scramp==1.4.1
 six==1.16.0
 soupsieve==2.3.1
 sql-metadata==2.3.0
-sqlparse==0.4.2
+sqlparse==0.4.4
 urllib3==1.26.8
