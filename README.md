@@ -1,5 +1,7 @@
 # dbtools
 
+## IMPORTANT: This package is no longer being maintained, and may stop working in future versions of R. Please migrate to [Rdbtools](https://github.com/moj-analytical-services/Rdbtools) instead.
+
 ## About
 
 A package that is used to run SQL queries configured for the 
